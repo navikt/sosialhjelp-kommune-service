@@ -8,7 +8,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import java.lang.RuntimeException
-import no.nav.sosialhjelp.Kommuner
 import org.slf4j.LoggerFactory
 
 private const val fiksBaseUrl = "https://api.fiks.ks.no"

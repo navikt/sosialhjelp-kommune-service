@@ -1,16 +1,14 @@
 package no.nav.sosialhjelp.plugins
 
 import io.ktor.server.application.*
-import io.ktor.server.auth.authenticate
-import io.ktor.server.response.*
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
-import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.sosialhjelp.kommuner
-import no.nav.sosialhjelp.naisRoutes
 
 fun Application.configureRouting(scrape: () -> String) {
   routing {
-    naisRoutes(scrape)
-    kommuner()
+    get("/internal/is_alive") { call.respondText("I'm alive!") }
+    get("/internal/is_ready") { call.respondText("I'm ready!") }
+    get("/internal/prometheus") { call.respond(scrape()) }
   }
 }

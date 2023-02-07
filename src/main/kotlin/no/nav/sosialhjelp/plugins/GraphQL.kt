@@ -11,9 +11,8 @@ fun Application.configureGraphQL() {
   install(GraphQL) {
     useDefaultPrettyPrinter = true
     playground = true
-    endpoint = "/graphql"
 
-    wrap { authenticate(optional = true, build = it) }
+    wrap { authenticate(optional = true, build = it, configurations = arrayOf("tokenx")) }
 
     context { call ->
       call.authentication.principal<TokenValidationContextPrincipal>()?.let { +it }

@@ -31,7 +31,7 @@ import no.nav.security.token.support.core.validation.JwtTokenValidationHandler
 import org.slf4j.LoggerFactory
 
 fun Application.configureSecurity() {
-  authentication { tokenValidationSupport("maskinporten", TokenSupportConfig(), null) }
+  authentication { tokenValidationSupport("tokenx", TokenSupportConfig(), null) }
 }
 
 class JwtTokenExpiryThresholdHandler(private val expiryThreshold: Int) {
@@ -111,8 +111,7 @@ class TokenSupportAuthenticationProvider(
     val applicationCall = context.call
     val tokenValidationContext =
         jwtTokenValidationHandler.getValidatedTokens(
-            JwtTokenHttpRequest(applicationCall.request.cookies, applicationCall.request.headers)
-        )
+            JwtTokenHttpRequest(applicationCall.request.cookies, applicationCall.request.headers))
     try {
       if (tokenValidationContext.hasValidToken()) {
         if (requiredClaims != null) {
@@ -134,8 +133,7 @@ class TokenSupportAuthenticationProvider(
     }
     context.challenge(key = "JWTAuthKey", cause = AuthenticationFailedCause.InvalidCredentials) {
         authenticationProcedureChallenge,
-        call ->
-      call.respond(UnauthorizedResponse())
+        _ ->
       authenticationProcedureChallenge.complete()
     }
   }

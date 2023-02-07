@@ -33,8 +33,6 @@ dependencies {
   implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-  implementation("com.apurebase:kgraphql:$kgraphql_version")
-  implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
   implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
@@ -46,12 +44,18 @@ dependencies {
   implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-resources:$ktor_version")
   implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
+  implementation("io.ktor:ktor-client-cio:$ktor_version")
+
+  implementation("com.apurebase:kgraphql:$kgraphql_version")
+  implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
+
   implementation("ch.qos.logback:logback-classic:$logback_version")
 
   implementation("no.nav.security:token-validation-core:${token_support_version}")
 
   implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
+    implementation("io.ktor:ktor-client-logging-jvm:2.2.3")
 
-  testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
