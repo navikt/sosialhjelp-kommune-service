@@ -1,5 +1,8 @@
 package no.nav.sosialhjelp.fiks
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class FiksKommuneResponse(
     val behandlingsansvarlig: String?,
     val harMidlertidigDeaktivertMottak: Boolean,
@@ -11,6 +14,7 @@ data class FiksKommuneResponse(
     val kontaktpersoner: Kontaktpersoner
 )
 
+@Serializable
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String>,
     val tekniskAnsvarligEpost: List<String>

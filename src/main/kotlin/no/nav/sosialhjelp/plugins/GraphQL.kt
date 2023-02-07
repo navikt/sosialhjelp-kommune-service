@@ -16,6 +16,7 @@ fun Application.configureGraphQL() {
 
     context { call ->
       call.authentication.principal<TokenValidationContextPrincipal>()?.let { +it }
+      +log
     }
 
     schema { kommuneSchema() }

@@ -2,34 +2,46 @@ package no.nav.sosialhjelp
 
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
+import com.apurebase.kgraphql.schema.execution.Executor
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import nidomiro.kdataloader.ExecutionResult
 import no.nav.sosialhjelp.fiks.getAllFiksKommuner
 import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
 import no.nav.sosialhjelp.plugins.TokenValidationContextPrincipal
+import no.nav.sosialhjelp.utils.Env
+import no.nav.sosialhjelp.utils.Environment
+
+val httpClient = HttpClient {
+  install(Logging) {
+    logger = Logger.DEFAULT
+    level = LogLevel.HEADERS
+  }
+  install(ContentNegotiation) {
+    json(
+        Json {
+          prettyPrint = true
+          isLenient = true
+        })
+  }
+}
 
 fun SchemaBuilder.kommuneSchema() {
-  val httpClient =
-      HttpClient {
-        install(Logging) {
-          logger = Logger.DEFAULT
-          level = LogLevel.HEADERS
-        }
-      }
+  configure { executor = Executor.DataLoaderPrepared }
+
   query("kommuner") {
     description = "Alle kommuner"
     resolver { ->
       withContext(Dispatchers.IO) {
         val fiksKommunerDeferred = async { getAllFiksKommuner(httpClient) }
-        val geodataKommunerDeferred = async {
-          getAllGeodataKommuner(httpClient).associateBy { it.kommunenummer }
-        }
         val fiksKommuner = fiksKommunerDeferred.await()
-        val geodataKommune = geodataKommunerDeferred.await()
         fiksKommuner.map { fiksKommune ->
           Kommune(
               harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
@@ -43,18 +55,29 @@ fun SchemaBuilder.kommuneSchema() {
                   Kontaktpersoner(
                       fiksKommune.kontaktpersoner.fagansvarligEpost,
                       fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
-              kommunenavn = geodataKommune[fiksKommune.kommunenummer]?.kommunenavnNorsk
-                      ?: "Ukjent navn på kommune")
+          )
         }
       }
     }
 
     type<Kommune> {
-      property<Kontaktpersoner>("kontaktpersoner") {
+      dataProperty("kommunenavn") {
+        prepare { kommune -> kommune.kommunenummer }
+        loader { ids ->
+          val kommuner =
+              getAllGeodataKommuner(httpClient).associate {
+                it.kommunenummer to it.kommunenavnNorsk
+              }
+          ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
+        }
+      }
+
+      property("kontaktpersoner") {
         description = "Informasjon om kontaktpersoner i kommunen"
-        resolver { k -> k.kontaktpersoner }
+        resolver { kommune -> kommune.kontaktpersoner }
         accessRule { _, context: Context ->
           when {
+            Environment.env != Env.PROD -> null
             context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
             context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
                 UnauthorizedException()
@@ -78,9 +101,10 @@ data class Kommune(
     val kanMottaSoknader: Boolean,
     val kanOppdatereStatus: Boolean,
     val kommunenummer: String,
-    val kommunenavn: String,
     val kontaktpersoner: Kontaktpersoner
-)
+) {
+  lateinit var kommunenavn: String
+}
 
 @Serializable
 data class Kontaktpersoner(

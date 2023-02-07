@@ -1,9 +1,10 @@
 package no.nav.sosialhjelp
 
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.engine.embeddedServer
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
-import io.ktor.server.netty.*
+import io.ktor.server.netty.Netty
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.sosialhjelp.plugins.configureGraphQL
