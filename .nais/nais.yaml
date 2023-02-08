@@ -10,12 +10,12 @@ metadata:
 spec:
   image: {{image}}
   liveness:
-    path: "/internal/isalive"
+    path: "/internal/is_alive"
     port: 8080
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/internal/isready"
+    path: "/internal/is_ready"
     port: 8080
     initialDelay: 20
     timeout: 60
@@ -25,7 +25,7 @@ spec:
     cpuThresholdPercentage: 50
   prometheus:
     enabled: true
-    path: "/internal/metrics"
+    path: "/internal/prometheus"
   resources:
     limits:
       cpu: "200m"
@@ -34,7 +34,7 @@ spec:
       cpu: "200m"
       memory: "256Mi"
   maskinporten:
-    enabled: true
+    enabled: {{maskinportenEnabled}}
     scopes:
       consumes:
         - name: "ks:fiks"

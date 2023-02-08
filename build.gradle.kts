@@ -59,6 +59,7 @@ dependencies {
   implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
   implementation("io.ktor:ktor-client-logging-jvm:2.2.3")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.2.3")
+    implementation("io.ktor:ktor-client-encoding:2.2.3")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

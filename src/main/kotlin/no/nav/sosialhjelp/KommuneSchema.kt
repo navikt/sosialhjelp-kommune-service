@@ -15,23 +15,11 @@ import kotlinx.serialization.json.Json
 import nidomiro.kdataloader.ExecutionResult
 import no.nav.sosialhjelp.fiks.getAllFiksKommuner
 import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
+import no.nav.sosialhjelp.fiks.getFiksKommune
+import no.nav.sosialhjelp.fiks.getGeodataKommune
 import no.nav.sosialhjelp.plugins.TokenValidationContextPrincipal
 import no.nav.sosialhjelp.utils.Env
 import no.nav.sosialhjelp.utils.Environment
-
-val httpClient = HttpClient {
-  install(Logging) {
-    logger = Logger.DEFAULT
-    level = LogLevel.HEADERS
-  }
-  install(ContentNegotiation) {
-    json(
-        Json {
-          prettyPrint = true
-          isLenient = true
-        })
-  }
-}
 
 fun SchemaBuilder.kommuneSchema() {
   configure { executor = Executor.DataLoaderPrepared }
@@ -39,50 +27,66 @@ fun SchemaBuilder.kommuneSchema() {
   query("kommuner") {
     description = "Alle kommuner"
     resolver { ->
+      getAllFiksKommuner(httpClient).map { fiksKommune ->
+        Kommune(
+            harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
+            harMidlertidigDeaktivertOppdateringer =
+                fiksKommune.harMidlertidigDeaktivertOppdateringer,
+            harNksTilgang = fiksKommune.harNksTilgang,
+            kanMottaSoknader = fiksKommune.kanMottaSoknader,
+            kanOppdatereStatus = fiksKommune.kanOppdatereStatus,
+            kommunenummer = fiksKommune.kommunenummer,
+            kontaktpersoner =
+                Kontaktpersoner(
+                    fiksKommune.kontaktpersoner.fagansvarligEpost,
+                    fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
+        )
+      }
+    }
+  }
+
+  query("kommune") {
+    description = "En enkelt kommune"
+    resolver { kommunenummer: String ->
       withContext(Dispatchers.IO) {
-        val fiksKommunerDeferred = async { getAllFiksKommuner(httpClient) }
-        val fiksKommuner = fiksKommunerDeferred.await()
-        fiksKommuner.map { fiksKommune ->
+        val kommune = async { getFiksKommune(kommunenummer, httpClient) }
+        val andreKommune = async { getGeodataKommune(kommunenummer, httpClient) }
+        with(kommune.await()) {
           Kommune(
-              harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
-              harMidlertidigDeaktivertOppdateringer =
-                  fiksKommune.harMidlertidigDeaktivertOppdateringer,
-              harNksTilgang = fiksKommune.harNksTilgang,
-              kanMottaSoknader = fiksKommune.kanMottaSoknader,
-              kanOppdatereStatus = fiksKommune.kanOppdatereStatus,
-              kommunenummer = fiksKommune.kommunenummer,
-              kontaktpersoner =
+                  harMidlertidigDeaktivertMottak,
+                  harMidlertidigDeaktivertOppdateringer,
+                  harNksTilgang,
+                  kanMottaSoknader,
+                  kanOppdatereStatus,
+                  kommunenummer,
                   Kontaktpersoner(
-                      fiksKommune.kontaktpersoner.fagansvarligEpost,
-                      fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
-          )
+                      kontaktpersoner.fagansvarligEpost, kontaktpersoner.tekniskAnsvarligEpost))
+              .also { it.kommunenavn = andreKommune.await().kommunenavnNorsk }
         }
       }
     }
+  }
 
-    type<Kommune> {
-      dataProperty("kommunenavn") {
-        prepare { kommune -> kommune.kommunenummer }
-        loader { ids ->
-          val kommuner =
-              getAllGeodataKommuner(httpClient).associate {
-                it.kommunenummer to it.kommunenavnNorsk
-              }
-          ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
-        }
+  type<Kommune> {
+    dataProperty("kommunenavn") {
+      prepare { kommune -> kommune.kommunenummer }
+      loader { ids ->
+        val kommuner =
+            getAllGeodataKommuner(httpClient).associate { it.kommunenummer to it.kommunenavnNorsk }
+        ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
       }
+    }
 
-      property("kontaktpersoner") {
-        description = "Informasjon om kontaktpersoner i kommunen"
-        resolver { kommune -> kommune.kontaktpersoner }
-        accessRule { _, context: Context ->
-          when {
-            Environment.env != Env.PROD -> null
-            context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
-            context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
-                UnauthorizedException()
-            else -> null
-          }
+    property("kontaktpersoner") {
+      description = "Informasjon om kontaktpersoner i kommunen"
+      resolver { kommune -> kommune.kontaktpersoner }
+      accessRule { _, context: Context ->
+        when {
+          Environment.env != Env.PROD -> null
+          context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
+          context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
+              UnauthorizedException()
+          else -> null
         }
       }
     }

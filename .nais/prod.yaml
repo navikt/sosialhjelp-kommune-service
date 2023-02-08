@@ -1,2 +1,3 @@
 ingresses:
 - "https://sosialhjelp-kommune-service.intern.nav.no"
+maskinportenEnabled: true
