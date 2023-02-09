@@ -9,6 +9,8 @@ import io.ktor.http.*
 import io.ktor.http.ContentType.Application.FormUrlEncoded
 import io.ktor.serialization.kotlinx.json.json
 import java.time.Instant
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 const val GRANT_TYPE = "urn:ietf:params:oauth:grant-type:jwt-bearer"
 const val LEEWAY_SECONDS: Long = 20
@@ -22,7 +24,15 @@ class HttpClientMaskinportenTokenProvider(
 ) : Oauth2JwtProvider {
   private val grants: JwtGrantFactory = JwtGrantFactory(config)
   private val cache = mutableMapOf<String, Token>()
-  private val client = HttpClient { install(ContentNegotiation) { json() } }
+  private val client = HttpClient {
+    install(ContentNegotiation) {
+      json(
+          Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+          })
+    }
+  }
 
   override suspend fun getToken(): String {
     val token = cache[config.scope]?.takeUnless(Token::hasExpired) ?: fetchToken()
@@ -37,12 +47,14 @@ class HttpClientMaskinportenTokenProvider(
           }
           .body<Token>()
           .also { token -> cache[config.scope] = token }
+}
 
-  private data class Token(val access_token: String) {
-    private val signedJwt = SignedJWT.parse(access_token)
-    private val expiry =
-        signedJwt.jwtClaimsSet.expirationTime.toInstant().minusSeconds(LEEWAY_SECONDS)
+@Serializable
+private data class Token(val access_token: String) {
+  private val signedJwt
+    get() = SignedJWT.parse(access_token)
+  private val expiry
+    get() = signedJwt.jwtClaimsSet.expirationTime.toInstant().minusSeconds(LEEWAY_SECONDS)
 
-    fun hasExpired() = expiry < Instant.now()
-  }
+  fun hasExpired() = expiry < Instant.now()
 }
