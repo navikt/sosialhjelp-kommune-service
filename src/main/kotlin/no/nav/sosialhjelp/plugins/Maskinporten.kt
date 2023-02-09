@@ -8,6 +8,8 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
 import no.nav.sosialhjelp.maskinporten.MaskinportenConfig
 import no.nav.sosialhjelp.utils.Env
@@ -18,7 +20,9 @@ fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
     return HttpClientMaskinportenTokenProvider(
         MaskinportenConfig(tokenEndpointUrl = "token_url", issuer = "issuer"))
   }
-  val client = HttpClient { install(ContentNegotiation) { json() } }
+  val client = HttpClient {
+    install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+  }
   val wellKnown: WellKnown = runBlocking {
     client.get(Environment.Maskinporten.wellKnownUrl).body<WellKnown>().also {
       log.info("Hentet well known for Maskinporten")
@@ -28,6 +32,7 @@ fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
   return HttpClientMaskinportenTokenProvider(config)
 }
 
+@Serializable
 data class WellKnown(
     val issuer: String,
     val token_endpoint: String,
