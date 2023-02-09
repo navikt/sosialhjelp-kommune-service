@@ -9,6 +9,7 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.sosialhjelp.plugins.configureGraphQL
 import no.nav.sosialhjelp.plugins.configureHTTP
+import no.nav.sosialhjelp.plugins.configureMaskinporten
 import no.nav.sosialhjelp.plugins.configureMonitoring
 import no.nav.sosialhjelp.plugins.configureRouting
 import no.nav.sosialhjelp.plugins.configureSecurity
@@ -27,5 +28,6 @@ fun Application.module() {
   configureHTTP()
   configureMonitoring()
   configureSerialization()
-  configureGraphQL()
+  val maskinportenClient = configureMaskinporten()
+  configureGraphQL(maskinportenClient)
 }

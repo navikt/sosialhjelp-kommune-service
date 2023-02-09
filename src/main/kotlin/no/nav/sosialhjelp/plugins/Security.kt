@@ -131,6 +131,7 @@ class TokenSupportAuthenticationProvider(
       val message = e.message ?: e.javaClass.simpleName
       log.trace("Token verification failed: {}", message)
     }
+      // TODO: Er det sikkert nok uten denne?
 //    context.challenge(key = "JWTAuthKey", cause = AuthenticationFailedCause.InvalidCredentials) {
 //        authenticationProcedureChallenge,
 //        call ->

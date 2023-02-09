@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: "sosialhjelp-kommune-service"
+  name: {{appName}}
   namespace: "teamdigisos"
   labels:
     "team": "teamdigisos"
@@ -41,4 +41,9 @@ spec:
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
+  {{/each}}
+env:
+  {{#each env as |value|}}
+  - name: {{@key}}
+    value: {{value}}
   {{/each}}

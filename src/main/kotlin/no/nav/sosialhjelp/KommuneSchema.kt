@@ -3,31 +3,28 @@ package no.nav.sosialhjelp
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.execution.Executor
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import nidomiro.kdataloader.ExecutionResult
 import no.nav.sosialhjelp.fiks.getAllFiksKommuner
 import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
 import no.nav.sosialhjelp.fiks.getFiksKommune
 import no.nav.sosialhjelp.fiks.getGeodataKommune
+import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
 import no.nav.sosialhjelp.plugins.TokenValidationContextPrincipal
 import no.nav.sosialhjelp.utils.Env
 import no.nav.sosialhjelp.utils.Environment
 
-fun SchemaBuilder.kommuneSchema() {
+fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenProvider) {
+
   configure { executor = Executor.DataLoaderPrepared }
 
   query("kommuner") {
     description = "Alle kommuner"
     resolver { ->
-      getAllFiksKommuner(httpClient).map { fiksKommune ->
+      getAllFiksKommuner(maskinportenClient).map { fiksKommune ->
         Kommune(
             harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
             harMidlertidigDeaktivertOppdateringer =
@@ -49,8 +46,8 @@ fun SchemaBuilder.kommuneSchema() {
     description = "En enkelt kommune"
     resolver { kommunenummer: String ->
       withContext(Dispatchers.IO) {
-        val kommune = async { getFiksKommune(kommunenummer, httpClient) }
-        val andreKommune = async { getGeodataKommune(kommunenummer, httpClient) }
+        val kommune = async { getFiksKommune(kommunenummer, maskinportenClient) }
+        val andreKommune = async { getGeodataKommune(kommunenummer) }
         with(kommune.await()) {
           Kommune(
                   harMidlertidigDeaktivertMottak,
@@ -72,7 +69,7 @@ fun SchemaBuilder.kommuneSchema() {
       prepare { kommune -> kommune.kommunenummer }
       loader { ids ->
         val kommuner =
-            getAllGeodataKommuner(httpClient).associate { it.kommunenummer to it.kommunenavnNorsk }
+            getAllGeodataKommuner().associate { it.kommunenummer to it.kommunenavnNorsk }
         ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
       }
     }

@@ -6,8 +6,9 @@ import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import no.nav.sosialhjelp.kommuneSchema
+import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
 
-fun Application.configureGraphQL() {
+fun Application.configureGraphQL(maskinportenClient: HttpClientMaskinportenTokenProvider) {
   install(GraphQL) {
     useDefaultPrettyPrinter = true
     playground = true
@@ -19,6 +20,6 @@ fun Application.configureGraphQL() {
       +log
     }
 
-    schema { kommuneSchema() }
+    schema { kommuneSchema(maskinportenClient) }
   }
 }

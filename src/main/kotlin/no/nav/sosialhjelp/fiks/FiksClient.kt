@@ -10,61 +10,39 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlin.RuntimeException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import no.nav.sosialhjelp.utils.Env
+import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
 import no.nav.sosialhjelp.utils.Environment
-import no.nav.sosialhjelp.utils.getEnvVar
 import org.slf4j.LoggerFactory
 
 val logger = LoggerFactory.getLogger("Fiks-client")
 
-val httpClient = HttpClient {
-    install(Logging) {
-        logger = Logger.DEFAULT
-        level = LogLevel.HEADERS
-    }
-    install(ContentNegotiation) {
-        json(
-            Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
-    }
-}
-
-fun maskinporten(): String {
-    return ""
-}
-
-
-suspend fun getAllFiksKommuner(): List<FiksKommuneResponse> {
-  if (Environment.env == Env.PROD) {
-    val response =
-        httpClient
-            .post(getEnvVar("maskinporten_well_known_url")) {
-                contentType(ContentType.Application.FormUrlEncoded)
-                setBody()
-            }
-            .body(BodyInserters.fromFormData(params))
-            .retrieve()
-            .bodyToMono<MaskinportenResponse>()
-            .doOnSuccess { log.info("Hentet token fra Maskinporten") }
-            .doOnError { log.warn("Noe feilet ved henting av token fra Maskinporten", it) }
-            .block()
-            ?: throw RuntimeException("Noe feilet ved henting av token fra Maskinporten")
+private val httpClient = HttpClient {
+  install(Logging) {
+    logger = Logger.DEFAULT
+    level = LogLevel.HEADERS
   }
+  install(ContentNegotiation) {
+    json(
+        Json {
+          prettyPrint = true
+          isLenient = true
+          ignoreUnknownKeys = true
+        })
+  }
+}
 
+suspend fun getAllFiksKommuner(
+    maskinportenClient: HttpClientMaskinportenTokenProvider
+): List<FiksKommuneResponse> {
+  val token = maskinportenClient.getToken()
   val request =
       httpClient.get("${Environment.fiksBaseUrl}/digisos/api/v1/nav/kommuner") {
-        header("Authorization", "Bearer abc")
+        header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
   when (request.status.value) {
@@ -104,10 +82,14 @@ suspend fun getAllGeodataKommuner(): List<KartverketKommune> {
   }
 }
 
-suspend fun getFiksKommune(kommunenummer: String): FiksKommuneResponse {
+suspend fun getFiksKommune(
+    kommunenummer: String,
+    maskinportenClient: HttpClientMaskinportenTokenProvider
+): FiksKommuneResponse {
+  val token = maskinportenClient.getToken()
   val request =
       httpClient.get("${Environment.fiksBaseUrl}/digisos/api/v1/nav/kommuner/${kommunenummer}") {
-        header("Authorization", "Bearer abc")
+        header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
   when (request.status.value) {

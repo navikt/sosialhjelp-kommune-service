@@ -1,10 +1,9 @@
 FROM gcr.io/distroless/java17
 
-# TODO change to match the path to your "fat jar"
-COPY build/libs/app-all.jar /app/app-all.jar
+COPY build/libs/sosialhjelp-kommune-service-all.jar /app/sosialhjelp-kommune-service-all.jar
 
 WORKDIR /app
 
 USER nonroot
 
-CMD ["app-all.jar"]
+CMD ["sosialhjelp-kommune-service-all.jar"]
