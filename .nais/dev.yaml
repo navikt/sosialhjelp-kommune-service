@@ -1,7 +1,7 @@
 appName: "sosialhjelp-kommune-service"
 ingresses:
   - "https://sosialhjelp-kommune-service.dev.intern.nav.no"
-maskinportenEnabled: false
+maskinportenEnabled: true
 env:
   "FIKS_BASE_URL": "http://localhost:8989/sosialhjelp/mock-alt-api/fiks"
   "ENV": "DEV"

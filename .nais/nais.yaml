@@ -5,8 +5,6 @@ metadata:
   namespace: "teamdigisos"
   labels:
     "team": "teamdigisos"
-    "start.nais.io/created-by": "Martin"
-    "start.nais.io/creationTimestamp": "2023-01-26T08:27:43.110371493"
 spec:
   image: {{image}}
   liveness:
@@ -40,10 +38,14 @@ spec:
         - name: "ks:fiks"
   ingresses:
   {{#each ingresses as |url|}}
-    - {{url}}
+      - {{url}}
   {{/each}}
-env:
-  {{#each env as |value|}}
-  - name: {{@key}}
-    value: {{value}}
-  {{/each}}
+  accessPolicy:
+    outbound:
+      rules:
+        - application: sosialhjelp-mock-alt-api-mock
+  env:
+    {{#each env}}
+    - name: {{@key}}
+      value: {{this}}
+    {{/each}}

@@ -42,7 +42,7 @@ jobs:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/nais.yaml"
-          "VARS": ".nais/mock.yaml"
+          "VARS": ".nais/dev.yaml"
   "deployAppToMock":
     name: "Deploy app to mock"
     needs: "build"

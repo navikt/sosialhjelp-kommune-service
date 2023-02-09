@@ -4,10 +4,10 @@ object Environment {
   val fiksBaseUrl: String =
       getEnvVar("FIKS_BASE_URL", "http://localhost:8989/sosialhjelp/mock-alt-api/fiks")
   val geodataBaseUrl: String = getEnvVar("GEODATA_BASE_URL", "https://ws.geonorge.no")
-  val env: Env = Env.valueOf(getEnvVar("ENV", "MOCK_ALT"))
+  val env: Env = Env.valueOf(getEnvVar("ENV", "MOCK"))
 
   object Maskinporten {
-    val wellKnownUrl: String = getEnvVar("MASKINPORTEN_WELL_KNOWN_URL")
+    val wellKnownUrl: String = getEnvVar("MASKINPORTEN_WELL_KNOWN_URL", "http://localhost:8989/sosialhjelp/mock-alt-api/well-known/maskinporten")
     val clientId: String = getEnvVar("MASKINPORTEN_CLIENTID", "maskinporten_clientid")
     val clientJwk: String = getEnvVar("MASKINPORTEN_CLIENT_JWK", "generateRSA")
     val scopes: String = getEnvVar("MASKINPORTEN_SCOPES", "scopes")
