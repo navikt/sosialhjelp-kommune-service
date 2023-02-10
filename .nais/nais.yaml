@@ -36,6 +36,9 @@ spec:
     scopes:
       consumes:
         - name: "ks:fiks"
+  azure:
+    application:
+      enabled: {{azureEnabled}}
   ingresses:
   {{#each ingresses as |url|}}
       - {{url}}

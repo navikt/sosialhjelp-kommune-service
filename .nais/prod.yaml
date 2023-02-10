@@ -2,6 +2,7 @@ appName: "sosialhjelp-kommune-service"
 ingresses:
   - "https://sosialhjelp-kommune-service.intern.nav.no"
 maskinportenEnabled: true
+azureEnabled: true
 env:
   "FIKS_BASE_URL": "https://api.fiks.ks.no"
   "ENV": "prod"

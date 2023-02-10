@@ -2,6 +2,7 @@ appName: "sosialhjelp-kommune-service-mock"
 ingresses:
   - "https://sosialhjelp-kommune-service-mock.dev.intern.nav.no"
 maskinportenEnabled: false
+azureEnabled: false
 env:
   "FIKS_BASE_URL": "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/fiks"
   "MASKINPORTEN_WELL_KNOWN_URL": "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/well-known/maskinporten"
