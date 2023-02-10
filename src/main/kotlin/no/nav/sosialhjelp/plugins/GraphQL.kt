@@ -7,11 +7,13 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import no.nav.sosialhjelp.kommuneSchema
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
+import no.nav.sosialhjelp.utils.Env
+import no.nav.sosialhjelp.utils.Environment
 
 fun Application.configureGraphQL(maskinportenClient: HttpClientMaskinportenTokenProvider) {
   install(GraphQL) {
     useDefaultPrettyPrinter = true
-    playground = true
+    playground = Environment.env != Env.PROD
 
     wrap { authenticate(optional = true, build = it, configurations = arrayOf("tokenx")) }
 

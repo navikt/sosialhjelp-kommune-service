@@ -12,13 +12,11 @@ import no.nav.sosialhjelp.UnauthorizedException
 fun Application.configureHTTP() {
   install(CORS) {
     allowMethod(HttpMethod.Options)
-    allowMethod(HttpMethod.Put)
-    allowMethod(HttpMethod.Delete)
-    allowMethod(HttpMethod.Patch)
     allowMethod(HttpMethod.Get)
     allowMethod(HttpMethod.Post)
     allowHeader(HttpHeaders.Authorization)
     anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+    allowCredentials = true
   }
   install(StatusPages) {
     exception<Throwable> { call, cause ->

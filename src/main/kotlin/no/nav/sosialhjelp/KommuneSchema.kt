@@ -68,8 +68,7 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
     dataProperty("kommunenavn") {
       prepare { kommune -> kommune.kommunenummer }
       loader { ids ->
-        val kommuner =
-            getAllGeodataKommuner().associate { it.kommunenummer to it.kommunenavnNorsk }
+        val kommuner = getAllGeodataKommuner().associate { it.kommunenummer to it.kommunenavnNorsk }
         ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
       }
     }
@@ -79,7 +78,7 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
       resolver { kommune -> kommune.kontaktpersoner }
       accessRule { _, context: Context ->
         when {
-          Environment.env != Env.PROD -> null
+          Environment.env == Env.TEST || Environment.env == Env.MOCK -> null
           context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
           context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
               UnauthorizedException()
