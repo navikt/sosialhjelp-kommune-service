@@ -39,6 +39,7 @@ spec:
   azure:
     application:
       enabled: {{azureEnabled}}
+      tenant: nav.no
   ingresses:
   {{#each ingresses as |url|}}
       - {{url}}
