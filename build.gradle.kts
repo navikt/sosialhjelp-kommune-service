@@ -45,7 +45,7 @@ dependencies {
   implementation("io.ktor:ktor-server-resources:$ktor_version")
   implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
   implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-  implementation("io.ktor:ktor-client-cio:$ktor_version")
+  implementation("io.ktor:ktor-client-okhttp:$ktor_version")
   implementation("io.ktor:ktor-client-core:$ktor_version")
   implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
 
@@ -58,9 +58,9 @@ dependencies {
 
   implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
   implementation("io.ktor:ktor-client-logging-jvm:2.2.3")
-    implementation("io.ktor:ktor-server-status-pages-jvm:2.2.3")
-    implementation("io.ktor:ktor-client-encoding:2.2.3")
+  implementation("io.ktor:ktor-server-status-pages-jvm:2.2.3")
+  implementation("io.ktor:ktor-client-encoding:2.2.3")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+  testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
