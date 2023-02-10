@@ -15,10 +15,10 @@ fun Application.configureGraphQL(maskinportenClient: HttpClientMaskinportenToken
     useDefaultPrettyPrinter = true
     playground = Environment.env != Env.PROD
 
-//    wrap { authenticate(optional = true, build = it, configurations = arrayOf("tokenx")) }
+    wrap { authenticate(optional = true, build = it, configurations = arrayOf("tokenx")) }
 
     context { call ->
-//      call.authentication.principal<TokenValidationContextPrincipal>()?.let { +it }
+      call.authentication.principal<TokenValidationContextPrincipal>()?.let { +it }
       +log
     }
 

@@ -10,14 +10,16 @@ import no.nav.sosialhjelp.NoTokenException
 import no.nav.sosialhjelp.UnauthorizedException
 
 fun Application.configureHTTP() {
-//  install(CORS) {
-//    allowMethod(HttpMethod.Options)
-//    allowMethod(HttpMethod.Get)
-//    allowMethod(HttpMethod.Post)
-//    allowHeader(HttpHeaders.Authorization)
-//    anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
-//    allowCredentials = true
-//  }
+  install(CORS) {
+    allowMethod(HttpMethod.Options)
+    allowMethod(HttpMethod.Get)
+    allowMethod(HttpMethod.Post)
+    allowHeader(HttpHeaders.Authorization)
+    allowHeader(HttpHeaders.XRequestId)
+    allowHeader("Nav-Call-Id")
+    allowHeader("X-XSRF-TOKEN")
+    anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+  }
   install(StatusPages) {
     exception<Throwable> { call, cause ->
       this@configureHTTP.log.error("Error on ${call.request.path()}", cause)

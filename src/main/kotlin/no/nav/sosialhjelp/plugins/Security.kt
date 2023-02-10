@@ -31,7 +31,7 @@ import no.nav.security.token.support.core.validation.JwtTokenValidationHandler
 import org.slf4j.LoggerFactory
 
 fun Application.configureSecurity() {
-//  authentication { tokenValidationSupport("tokenx", TokenSupportConfig(), null) }
+  authentication { tokenValidationSupport("tokenx", TokenSupportConfig(), null) }
 }
 
 class JwtTokenExpiryThresholdHandler(private val expiryThreshold: Int) {
