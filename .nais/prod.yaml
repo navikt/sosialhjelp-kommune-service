@@ -3,5 +3,5 @@ ingresses:
   - "https://sosialhjelp-kommune-service.intern.nav.no"
 maskinportenEnabled: true
 env:
-  "FIKS_BASE_URL": "https://api.fiks.ks.no/"
+  "FIKS_BASE_URL": "https://api.fiks.ks.no"
   "ENV": "prod"
