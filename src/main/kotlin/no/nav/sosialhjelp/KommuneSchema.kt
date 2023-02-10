@@ -76,15 +76,15 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
     property("kontaktpersoner") {
       description = "Informasjon om kontaktpersoner i kommunen"
       resolver { kommune -> kommune.kontaktpersoner }
-//      accessRule { _, context: Context ->
-//        when {
-//          Environment.env == Env.TEST || Environment.env == Env.MOCK -> null
-//          context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
-//          context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
-//              UnauthorizedException()
-//          else -> null
-//        }
-//      }
+      accessRule { _, context: Context ->
+        when {
+          Environment.env == Env.TEST || Environment.env == Env.MOCK -> null
+          context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
+          context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
+              UnauthorizedException()
+          else -> null
+        }
+      }
     }
   }
 }
