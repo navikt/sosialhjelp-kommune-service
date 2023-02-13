@@ -3,6 +3,8 @@ package no.nav.sosialhjelp
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.execution.Executor
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.util.logging.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -13,7 +15,6 @@ import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
 import no.nav.sosialhjelp.fiks.getFiksKommune
 import no.nav.sosialhjelp.fiks.getGeodataKommune
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
-import no.nav.sosialhjelp.plugins.TokenValidationContextPrincipal
 import no.nav.sosialhjelp.utils.Env
 import no.nav.sosialhjelp.utils.Environment
 
@@ -23,7 +24,8 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
 
   query("kommuner") {
     description = "Alle kommuner"
-    resolver { ->
+    resolver { context: Context ->
+      context.get<Logger>()!!.info("Henter alle kommuner fra fiks")
       getAllFiksKommuner(maskinportenClient).map { fiksKommune ->
         Kommune(
             harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
@@ -77,11 +79,12 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
       description = "Informasjon om kontaktpersoner i kommunen"
       resolver { kommune -> kommune.kontaktpersoner }
       accessRule { _, context: Context ->
+        context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
         when {
           Environment.env == Env.TEST || Environment.env == Env.MOCK -> null
-          context.get<TokenValidationContextPrincipal>() == null -> NoTokenException()
-          context.get<TokenValidationContextPrincipal>()?.context?.hasValidToken() == false ->
-              UnauthorizedException()
+          context.get<JWTPrincipal>() == null -> NoTokenException()
+          //          context.get<JWTPrincipal>()?.payload ->
+          //              UnauthorizedException()
           else -> null
         }
       }

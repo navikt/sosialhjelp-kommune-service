@@ -21,7 +21,13 @@ fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
         MaskinportenConfig(tokenEndpointUrl = "token_url", issuer = "issuer"))
   }
   val client = HttpClient {
-    install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+    install(ContentNegotiation) {
+      json(
+          Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+          })
+    }
   }
   val wellKnown: WellKnown = runBlocking {
     client.get(Environment.Maskinporten.wellKnownUrl).body<WellKnown>().also {

@@ -39,7 +39,7 @@ spec:
   azure:
     application:
       enabled: {{azureEnabled}}
-      tenant: nav.no
+      allowAllUsers: true
   ingresses:
   {{#each ingresses as |url|}}
       - {{url}}
@@ -51,6 +51,8 @@ spec:
     inbound:
       rules:
         - application: sosialhjelp-adminpanel
+  envFrom:
+    - secret: "fiks-integrasjon-secret"
   env:
     {{#each env}}
     - name: {{@key}}

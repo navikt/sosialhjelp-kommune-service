@@ -26,7 +26,6 @@ internal class JwtGrantFactory(private val config: MaskinportenConfig) {
               issueTime(Date())
               expirationTime(Instant.now() + config.expireAfterSec)
               claim("scope", config.scope)
-              claim("resource", config.resource)
             }
             .build()
 }

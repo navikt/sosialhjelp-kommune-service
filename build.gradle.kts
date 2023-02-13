@@ -30,6 +30,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.
 dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
 
+  // Ktor-server
   implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
@@ -45,8 +46,11 @@ dependencies {
   implementation("io.ktor:ktor-server-resources:$ktor_version")
   implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
   implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+
+  // Ktor-client
   implementation("io.ktor:ktor-client-okhttp:$ktor_version")
   implementation("io.ktor:ktor-client-core:$ktor_version")
+  implementation("io.ktor:ktor-client-logging:$ktor_version")
   implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
 
   implementation("com.apurebase:kgraphql:$kgraphql_version")
@@ -55,6 +59,7 @@ dependencies {
   implementation("ch.qos.logback:logback-classic:$logback_version")
 
   implementation("no.nav.security:token-validation-core:${token_support_version}")
+  implementation("no.nav.security:token-validation-ktor-v2:${token_support_version}")
 
   implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
   implementation("io.ktor:ktor-client-logging-jvm:2.2.3")

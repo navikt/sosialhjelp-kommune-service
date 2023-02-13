@@ -24,7 +24,7 @@ val logger = LoggerFactory.getLogger("Fiks-client")
 private val httpClient = HttpClient {
   install(Logging) {
     logger = Logger.DEFAULT
-    level = LogLevel.HEADERS
+    level = LogLevel.INFO
   }
   install(ContentNegotiation) {
     json(
@@ -41,7 +41,9 @@ suspend fun getAllFiksKommuner(
 ): List<FiksKommuneResponse> {
   val token = maskinportenClient.getToken()
   val request =
-      httpClient.get("${Environment.fiksBaseUrl}/digisos/api/v1/nav/kommuner") {
+      httpClient.get("${Environment.Fiks.baseUrl}/digisos/api/v1/nav/kommuner") {
+        header("IntegrasjonId", Environment.Fiks.integrasjonId)
+        header("IntegrasjonPassord", Environment.Fiks.integrasjonPassord)
         header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
@@ -88,7 +90,9 @@ suspend fun getFiksKommune(
 ): FiksKommuneResponse {
   val token = maskinportenClient.getToken()
   val request =
-      httpClient.get("${Environment.fiksBaseUrl}/digisos/api/v1/nav/kommuner/${kommunenummer}") {
+      httpClient.get("${Environment.Fiks.baseUrl}/digisos/api/v1/nav/kommuner/${kommunenummer}") {
+        header("IntegrasjonId", Environment.Fiks.integrasjonId)
+        header("IntegrasjonPassord", Environment.Fiks.integrasjonPassord)
         header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
