@@ -4,5 +4,5 @@ ingresses:
 maskinportenEnabled: true
 azureEnabled: true
 env:
-  "FIKS_BASE_URL": "http://localhost:8989/sosialhjelp/mock-alt-api/fiks"
+  "FIKS_BASE_URL": "https://api.fiks.test.ks.no"
   "ENV": "DEV"
