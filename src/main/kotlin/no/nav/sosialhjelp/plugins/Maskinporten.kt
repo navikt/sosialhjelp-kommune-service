@@ -12,11 +12,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
 import no.nav.sosialhjelp.maskinporten.MaskinportenConfig
+import no.nav.sosialhjelp.utils.Config
 import no.nav.sosialhjelp.utils.Env
-import no.nav.sosialhjelp.utils.Environment
 
 fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
-  if (Environment.env == Env.TEST) {
+  if (Config.env == Env.TEST) {
     return HttpClientMaskinportenTokenProvider(
         MaskinportenConfig(tokenEndpointUrl = "token_url", issuer = "issuer"))
   }
@@ -30,7 +30,7 @@ fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
     }
   }
   val wellKnown: WellKnown = runBlocking {
-    client.get(Environment.Maskinporten.wellKnownUrl).body<WellKnown>().also {
+    client.get(Config.Maskinporten.wellKnownUrl).body<WellKnown>().also {
       log.info("Hentet well known for Maskinporten")
     }
   }

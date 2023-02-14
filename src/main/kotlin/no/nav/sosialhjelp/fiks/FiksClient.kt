@@ -16,7 +16,7 @@ import kotlin.RuntimeException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
-import no.nav.sosialhjelp.utils.Environment
+import no.nav.sosialhjelp.utils.Config
 import org.slf4j.LoggerFactory
 
 val logger = LoggerFactory.getLogger("Fiks-client")
@@ -41,9 +41,9 @@ suspend fun getAllFiksKommuner(
 ): List<FiksKommuneResponse> {
   val token = maskinportenClient.getToken()
   val request =
-      httpClient.get("${Environment.Fiks.baseUrl}/digisos/api/v1/nav/kommuner") {
-        header("IntegrasjonId", Environment.Fiks.integrasjonId)
-        header("IntegrasjonPassord", Environment.Fiks.integrasjonPassord)
+      httpClient.get("${Config.Fiks.baseUrl}/digisos/api/v1/nav/kommuner") {
+        header("IntegrasjonId", Config.Fiks.integrasjonId)
+        header("IntegrasjonPassord", Config.Fiks.integrasjonPassord)
         header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
@@ -65,7 +65,7 @@ suspend fun getAllFiksKommuner(
 
 suspend fun getAllGeodataKommuner(): List<KartverketKommune> {
   val request =
-      httpClient.get("${Environment.geodataBaseUrl}/kommuneinfo/v1/kommuner") {
+      httpClient.get("${Config.geodataBaseUrl}/kommuneinfo/v1/kommuner") {
         accept(ContentType.Application.Json)
       }
   return when (request.status.value) {
@@ -90,9 +90,9 @@ suspend fun getFiksKommune(
 ): FiksKommuneResponse {
   val token = maskinportenClient.getToken()
   val request =
-      httpClient.get("${Environment.Fiks.baseUrl}/digisos/api/v1/nav/kommuner/${kommunenummer}") {
-        header("IntegrasjonId", Environment.Fiks.integrasjonId)
-        header("IntegrasjonPassord", Environment.Fiks.integrasjonPassord)
+      httpClient.get("${Config.Fiks.baseUrl}/digisos/api/v1/nav/kommuner/${kommunenummer}") {
+        header("IntegrasjonId", Config.Fiks.integrasjonId)
+        header("IntegrasjonPassord", Config.Fiks.integrasjonPassord)
         header("Authorization", "Bearer $token")
         accept(ContentType.Application.Json)
       }
@@ -114,7 +114,7 @@ suspend fun getFiksKommune(
 
 suspend fun getGeodataKommune(kommunenummer: String): KartverketKommune {
   val request =
-      httpClient.get("${Environment.geodataBaseUrl}/kommuneinfo/v1/kommuner/${kommunenummer}") {
+      httpClient.get("${Config.geodataBaseUrl}/kommuneinfo/v1/kommuner/${kommunenummer}") {
         accept(ContentType.Application.Json)
       }
   return when (request.status.value) {

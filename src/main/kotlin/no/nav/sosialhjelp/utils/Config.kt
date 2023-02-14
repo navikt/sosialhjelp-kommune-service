@@ -4,7 +4,7 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import java.net.URL
 
-object Environment {
+object Config {
   val geodataBaseUrl: String = getEnvVar("GEODATA_BASE_URL", "https://ws.geonorge.no")
   val env: Env = Env.valueOf(getEnvVar("ENV", "MOCK"))
 

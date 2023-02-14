@@ -4,10 +4,10 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
-import no.nav.sosialhjelp.utils.Environment
+import no.nav.sosialhjelp.utils.Config
 
 fun Application.configureSecurity() {
-  val azureADConfig = Environment.AzureADConfig
+  val azureADConfig = Config.AzureADConfig
   authentication {
     jwt("azuread") {
       verifier(jwkProvider = azureADConfig.jwkProvider, issuer = azureADConfig.issuer) {

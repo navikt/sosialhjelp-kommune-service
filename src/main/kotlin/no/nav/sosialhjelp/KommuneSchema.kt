@@ -15,8 +15,8 @@ import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
 import no.nav.sosialhjelp.fiks.getFiksKommune
 import no.nav.sosialhjelp.fiks.getGeodataKommune
 import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
+import no.nav.sosialhjelp.utils.Config
 import no.nav.sosialhjelp.utils.Env
-import no.nav.sosialhjelp.utils.Environment
 
 fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenProvider) {
 
@@ -81,7 +81,7 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
       accessRule { _, context: Context ->
         context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
         when {
-          Environment.env == Env.TEST || Environment.env == Env.MOCK -> null
+          Config.env == Env.TEST || Config.env == Env.MOCK -> null
           context.get<JWTPrincipal>() == null -> NoTokenException()
           //          context.get<JWTPrincipal>()?.payload ->
           //              UnauthorizedException()
