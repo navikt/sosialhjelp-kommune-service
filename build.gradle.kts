@@ -10,6 +10,7 @@ plugins {
   kotlin("jvm") version "1.8.0"
   id("io.ktor.plugin") version "2.2.3"
   id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+  id("com.ncorti.ktfmt.gradle") version "0.11.0"
 }
 
 group = "no.nav.sosialhjelp"
@@ -25,7 +26,20 @@ application {
 
 repositories { mavenCentral() }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "17" }
+tasks {
+  val installPreCommitHook =
+      register("installPreCommitHook", Copy::class) {
+        from(File(rootProject.rootDir, "scripts/pre-commit"))
+        into(File(rootProject.rootDir, ".git/hooks"))
+        fileMode = 0b111101101
+        dirMode = 0b1010001010
+      }
+
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
+    dependsOn(installPreCommitHook)
+  }
+}
 
 dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
