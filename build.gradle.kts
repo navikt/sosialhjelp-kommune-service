@@ -5,6 +5,7 @@ val logback_version: String by project
 val token_support_version: String by project
 val prometheus_version: String by project
 val kgraphql_version: String by project
+val nimbus_version: String by project
 
 plugins {
   kotlin("jvm") version "1.8.0"
@@ -49,36 +50,28 @@ dependencies {
   implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-call-id-jvm:$ktor_version")
   implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
   implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-openapi:$ktor_version")
-  implementation("io.ktor:ktor-server-swagger:$ktor_version")
   implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-resources:$ktor_version")
   implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
-  implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+  implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
 
   // Ktor-client
   implementation("io.ktor:ktor-client-okhttp:$ktor_version")
   implementation("io.ktor:ktor-client-core:$ktor_version")
-  implementation("io.ktor:ktor-client-logging:$ktor_version")
   implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+  implementation("io.ktor:ktor-client-logging:$ktor_version")
 
   implementation("com.apurebase:kgraphql:$kgraphql_version")
   implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
 
   implementation("ch.qos.logback:logback-classic:$logback_version")
 
-  implementation("no.nav.security:token-validation-core:${token_support_version}")
-  implementation("no.nav.security:token-validation-ktor-v2:${token_support_version}")
+  implementation("com.nimbusds:nimbus-jose-jwt:$nimbus_version")
 
   implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
-  implementation("io.ktor:ktor-client-logging-jvm:2.2.3")
-  implementation("io.ktor:ktor-server-status-pages-jvm:2.2.3")
-  implementation("io.ktor:ktor-client-encoding:2.2.3")
 
   testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

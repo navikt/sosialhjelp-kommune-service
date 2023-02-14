@@ -1,0 +1,17 @@
+name: Deploy til prod
+on:
+  workflow_dispatch:
+
+jobs:
+  "deployAppToProd":
+    name: "Deploy app to prod"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Deploy to PROD"
+        uses: "nais/deploy/actions/deploy@v1"
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "prod-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/prod.yaml"

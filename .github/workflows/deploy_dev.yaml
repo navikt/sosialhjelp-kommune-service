@@ -1,0 +1,29 @@
+name: Deploy til dev
+on:
+  workflow_dispatch:
+
+jobs:
+  "deployAppToDev":
+    name: "Deploy app to dev"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Deploy to DEV"
+        uses: "nais/deploy/actions/deploy@v1"
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "dev-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/dev.yaml"
+  "deployAppToMock":
+    name: "Deploy app to mock"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Deploy to MOCK"
+        uses: "nais/deploy/actions/deploy@v1"
+        env:
+          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+          "CLUSTER": "dev-gcp"
+          "RESOURCE": ".nais/nais.yaml"
+          "VARS": ".nais/mock.yaml"
