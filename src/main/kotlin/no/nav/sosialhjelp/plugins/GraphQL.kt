@@ -1,15 +1,16 @@
 package no.nav.sosialhjelp.plugins
 
 import com.apurebase.kgraphql.GraphQL
+import io.ktor.client.HttpClient
 import io.ktor.server.application.*
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import no.nav.sosialhjelp.kommuneSchema
-import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
+import no.nav.sosialhjelp.maskinporten.Oauth2JwtProvider
 
-fun Application.configureGraphQL(maskinportenClient: HttpClientMaskinportenTokenProvider) {
+fun Application.configureGraphQL(maskinportenClient: Oauth2JwtProvider, client: HttpClient) {
   install(GraphQL) {
     useDefaultPrettyPrinter = true
     playground = true
@@ -21,6 +22,6 @@ fun Application.configureGraphQL(maskinportenClient: HttpClientMaskinportenToken
       +log
     }
 
-    schema { kommuneSchema(maskinportenClient) }
+    schema { kommuneSchema(maskinportenClient, client) }
   }
 }

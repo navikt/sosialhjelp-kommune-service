@@ -3,22 +3,19 @@ package no.nav.sosialhjelp
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.execution.Executor
+import io.ktor.client.HttpClient
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.util.logging.Logger
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import nidomiro.kdataloader.ExecutionResult
 import no.nav.sosialhjelp.fiks.getAllFiksKommuner
 import no.nav.sosialhjelp.fiks.getAllGeodataKommuner
 import no.nav.sosialhjelp.fiks.getFiksKommune
-import no.nav.sosialhjelp.fiks.getGeodataKommune
-import no.nav.sosialhjelp.maskinporten.HttpClientMaskinportenTokenProvider
-import no.nav.sosialhjelp.utils.Config
-import no.nav.sosialhjelp.utils.Env
+import no.nav.sosialhjelp.maskinporten.Oauth2JwtProvider
 
-fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenProvider) {
+fun SchemaBuilder.kommuneSchema(maskinportenClient: Oauth2JwtProvider, client: HttpClient) {
 
   configure { executor = Executor.DataLoaderPrepared }
 
@@ -26,7 +23,7 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
     description = "Alle kommuner"
     resolver { context: Context ->
       context.get<Logger>()!!.info("Henter alle kommuner fra fiks")
-      getAllFiksKommuner(maskinportenClient).map { fiksKommune ->
+      getAllFiksKommuner(maskinportenClient, client).map { fiksKommune ->
         Kommune(
             harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
             harMidlertidigDeaktivertOppdateringer =
@@ -48,19 +45,16 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
     description = "En enkelt kommune"
     resolver { kommunenummer: String ->
       withContext(Dispatchers.IO) {
-        val kommune = async { getFiksKommune(kommunenummer, maskinportenClient) }
-        val andreKommune = async { getGeodataKommune(kommunenummer) }
-        with(kommune.await()) {
+        getFiksKommune(kommunenummer, maskinportenClient, client).let {
           Kommune(
-                  harMidlertidigDeaktivertMottak,
-                  harMidlertidigDeaktivertOppdateringer,
-                  harNksTilgang,
-                  kanMottaSoknader,
-                  kanOppdatereStatus,
-                  kommunenummer,
-                  Kontaktpersoner(
-                      kontaktpersoner.fagansvarligEpost, kontaktpersoner.tekniskAnsvarligEpost))
-              .also { it.kommunenavn = andreKommune.await().kommunenavnNorsk }
+              it.harMidlertidigDeaktivertMottak,
+              it.harMidlertidigDeaktivertOppdateringer,
+              it.harNksTilgang,
+              it.kanMottaSoknader,
+              it.kanOppdatereStatus,
+              it.kommunenummer,
+              Kontaktpersoner(
+                  it.kontaktpersoner.fagansvarligEpost, it.kontaktpersoner.tekniskAnsvarligEpost))
         }
       }
     }
@@ -70,7 +64,8 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
     dataProperty("kommunenavn") {
       prepare { kommune -> kommune.kommunenummer }
       loader { ids ->
-        val kommuner = getAllGeodataKommuner().associate { it.kommunenummer to it.kommunenavnNorsk }
+        val kommuner =
+            getAllGeodataKommuner(client).associate { it.kommunenummer to it.kommunenavnNorsk }
         ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
       }
     }
@@ -80,37 +75,28 @@ fun SchemaBuilder.kommuneSchema(maskinportenClient: HttpClientMaskinportenTokenP
       resolver { kommune -> kommune.kontaktpersoner }
       accessRule { _, context: Context ->
         context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
-        when {
-          Config.env == Env.TEST || Config.env == Env.MOCK -> null
-          context.get<JWTPrincipal>() == null -> NoTokenException()
-          //          context.get<JWTPrincipal>()?.payload ->
-          //              UnauthorizedException()
-          else -> null
-        }
+        if (context.get<JWTPrincipal>() == null) UnauthorizedException() else null
       }
     }
   }
 }
 
-class NoTokenException : RuntimeException()
-
 class UnauthorizedException : RuntimeException()
 
 @Serializable
 data class Kommune(
-    val harMidlertidigDeaktivertMottak: Boolean,
-    val harMidlertidigDeaktivertOppdateringer: Boolean,
-    val harNksTilgang: Boolean,
-    val kanMottaSoknader: Boolean,
-    val kanOppdatereStatus: Boolean,
-    val kommunenummer: String,
-    val kontaktpersoner: Kontaktpersoner
-) {
-  lateinit var kommunenavn: String
-}
+    val harMidlertidigDeaktivertMottak: Boolean = false,
+    val harMidlertidigDeaktivertOppdateringer: Boolean = false,
+    val harNksTilgang: Boolean = false,
+    val kanMottaSoknader: Boolean = false,
+    val kanOppdatereStatus: Boolean = false,
+    val kommunenummer: String = "0301",
+    val kontaktpersoner: Kontaktpersoner = Kontaktpersoner(),
+    val kommunenavn: String = "Oslo"
+)
 
 @Serializable
 data class Kontaktpersoner(
-    val fagansvarligEpost: List<String>,
-    val tekniskAnsvarligEpost: List<String>
+    val fagansvarligEpost: List<String> = emptyList(),
+    val tekniskAnsvarligEpost: List<String> = emptyList()
 )
