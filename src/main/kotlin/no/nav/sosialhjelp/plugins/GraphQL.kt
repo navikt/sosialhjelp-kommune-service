@@ -7,7 +7,9 @@ import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
-import no.nav.sosialhjelp.kommuneSchema
+import no.nav.sosialhjelp.external.FiksClient
+import no.nav.sosialhjelp.external.GeodataClient
+import no.nav.sosialhjelp.graphql.kommuneSchema
 import no.nav.sosialhjelp.maskinporten.Oauth2JwtProvider
 
 fun Application.configureGraphQL(maskinportenClient: Oauth2JwtProvider, client: HttpClient) {
@@ -19,9 +21,11 @@ fun Application.configureGraphQL(maskinportenClient: Oauth2JwtProvider, client: 
 
     context { call ->
       call.authentication.principal<JWTPrincipal>()?.let { +it }
+      +FiksClient(maskinportenClient, client)
+      +GeodataClient(client)
       +log
     }
 
-    schema { kommuneSchema(maskinportenClient, client) }
+    schema { kommuneSchema() }
   }
 }

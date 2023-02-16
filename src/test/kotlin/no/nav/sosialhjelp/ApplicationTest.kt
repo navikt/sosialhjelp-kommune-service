@@ -20,8 +20,9 @@ import io.ktor.server.routing.routing
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.serialization.Serializable
-import no.nav.sosialhjelp.fiks.FiksKommuneResponse
-import no.nav.sosialhjelp.fiks.Kontaktpersoner
+import no.nav.sosialhjelp.external.FiksKommuneResponse
+import no.nav.sosialhjelp.external.Kontaktpersoner
+import no.nav.sosialhjelp.graphql.Kommune
 import no.nav.sosialhjelp.utils.MockJwtVerifier
 import no.nav.sosialhjelp.utils.withSetup
 

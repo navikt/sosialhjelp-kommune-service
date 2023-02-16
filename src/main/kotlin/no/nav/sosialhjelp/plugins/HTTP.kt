@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.path
 import io.ktor.server.response.respondText
-import no.nav.sosialhjelp.UnauthorizedException
+import no.nav.sosialhjelp.graphql.UnauthorizedException
 
 fun Application.configureHTTP() {
   install(StatusPages) {

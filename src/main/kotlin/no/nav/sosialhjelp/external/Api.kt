@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.fiks
+package no.nav.sosialhjelp.external
 
 import kotlinx.serialization.Serializable
 
@@ -18,4 +18,11 @@ data class FiksKommuneResponse(
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String>,
     val tekniskAnsvarligEpost: List<String>
+)
+
+@Serializable
+data class GeodataKommuneResponse(
+    val kommunenavn: String,
+    val kommunenavnNorsk: String,
+    val kommunenummer: String,
 )
