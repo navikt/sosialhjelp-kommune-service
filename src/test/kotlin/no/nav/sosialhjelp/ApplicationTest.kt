@@ -6,7 +6,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.call
@@ -78,11 +77,7 @@ class ApplicationTest {
         .post("/graphql") {
           setBody("{\"query\": \"{ kommuner { kontaktpersoner { tekniskAnsvarligEpost } } }\"}")
         }
-        .apply {
-          println(this.bodyAsText())
-          assertEquals(HttpStatusCode.Unauthorized, status)
-          println(bodyAsText())
-        }
+        .apply { assertEquals(HttpStatusCode.Unauthorized, status) }
   }
 
   @Test
