@@ -28,9 +28,8 @@ fun SchemaBuilder.kommuneSchema() {
     resolver { context: Context ->
       context.get<Logger>()!!.info("Henter alle kommuner fra fiks")
       val fiksClient = context.get<FiksClient>()!!
-      fiksClient
-          .getAllFiksKommuner()
-          .map { fiksKommune ->
+      val fiksKommuner =
+          fiksClient.getAllFiksKommuner().map { fiksKommune ->
             Kommune(
                 harMidlertidigDeaktivertMottak = fiksKommune.harMidlertidigDeaktivertMottak,
                 harMidlertidigDeaktivertOppdateringer =
@@ -45,11 +44,23 @@ fun SchemaBuilder.kommuneSchema() {
                         fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
             )
           }
-          .plus(
-              getManuelleKommuner().map {
-                Kommune(kommunenummer = it, kanMottaSoknader = true, kanOppdatereStatus = false)
-              })
-          .distinctBy { it.kommunenummer }
+      val alleKommuner =
+          fiksKommuner
+              .plus(
+                  getManuelleKommuner().map {
+                    Kommune(kommunenummer = it, kanMottaSoknader = true, kanOppdatereStatus = false)
+                  })
+              .distinctBy { it.kommunenummer }
+
+      val kommunerKunManuelle =
+          alleKommuner
+              .filterNot {
+                it.kommunenummer in fiksKommuner.map { fiksKommune -> fiksKommune.kommunenummer }
+              }
+              .map { it.kommunenummer }
+      context.get<Logger>()!!.info("Kommuner som kun er manuelt påkoblet: $kommunerKunManuelle")
+
+      alleKommuner
     }
   }
 
