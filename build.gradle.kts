@@ -69,7 +69,7 @@ dependencies {
   implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
 
   implementation("ch.qos.logback:logback-classic:$logback_version")
-  implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
+  runtimeOnly("net.logstash.logback:logstash-logback-encoder:$logstash_version")
 
   implementation("com.nimbusds:nimbus-jose-jwt:$nimbus_version")
 
