@@ -6,3 +6,4 @@ azureEnabled: true
 env:
   "FIKS_BASE_URL": "https://api.fiks.test.ks.no"
   "ENV": "DEV"
+  "MASKINPORTEN_WELL_KNOWN_URL": "https://ver2.maskinporten.no/.well-known/oauth-authorization-server"
