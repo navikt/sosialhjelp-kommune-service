@@ -10,20 +10,17 @@ jobs:
     name: "build"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - uses: "gradle/wrapper-validation-action@v1"
-      - uses: "actions/cache@v2"
+      - uses: "actions/setup-java@v3"
         with:
-          "path": "~/.gradle/caches"
-          "key": "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}"
-          "restore-keys": "${{ runner.os }}-gradle-"
-      - uses: "actions/setup-java@v1"
-        with:
-          "java-version": "17"
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
       - name: "compile and run tests"
         run: "./gradlew build buildFatJar"
       - name: "Login to GitHub Docker Registry"
-        uses: "docker/login-action@v1"
+        uses: "docker/login-action@v2"
         with:
           "registry": "ghcr.io"
           "username": "${{ github.actor }}"
@@ -35,7 +32,7 @@ jobs:
     needs: "build"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to DEV"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -48,7 +45,7 @@ jobs:
     needs: "build"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to MOCK"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -61,7 +58,7 @@ jobs:
     needs: "deployAppToDev"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to PROD"
         uses: "nais/deploy/actions/deploy@v1"
         env:
