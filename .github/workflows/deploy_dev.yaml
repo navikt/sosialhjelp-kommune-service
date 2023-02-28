@@ -7,7 +7,7 @@ jobs:
     name: "Deploy app to dev"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to DEV"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -19,7 +19,7 @@ jobs:
     name: "Deploy app to mock"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to MOCK"
         uses: "nais/deploy/actions/deploy@v1"
         env:
