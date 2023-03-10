@@ -25,7 +25,7 @@ data class GeodataKommuneResponse(
     val kommunenavn: String,
     val kommunenavnNorsk: String,
     val kommunenummer: String,
-    val fylkesnavn: String,
+    val fylkesnavn: String? = null,
 )
 
 @Serializable

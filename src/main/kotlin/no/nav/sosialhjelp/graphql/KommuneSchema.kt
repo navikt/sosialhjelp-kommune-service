@@ -92,7 +92,7 @@ fun SchemaBuilder.kommuneSchema() {
     resolver { searchString: String, context: Context ->
       context.get<GeodataClient>()!!.search(searchString).kommuner.map {
         KommuneSearchResult(
-            fylkesnavn = it.fylkesnavn,
+            fylkesnavn = it.fylkesnavn ?: error("${it.kommunenavnNorsk} er uten fylke"),
             kommunenummer = it.kommunenummer,
             kommunenavn = it.kommunenavnNorsk)
       }
