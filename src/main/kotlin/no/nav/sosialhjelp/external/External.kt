@@ -6,6 +6,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import no.nav.sosialhjelp.maskinporten.Oauth2JwtProvider
@@ -29,6 +30,7 @@ class FiksClient(
     return Response<List<FiksKommuneResponse>>(response) {
           on2xx {
             log.info("Fikk ${response.status} fra Fiks")
+            log.info("Hele responsen fra fiks: ${response.bodyAsText()}")
             response.body()
           }
         }
