@@ -105,12 +105,8 @@ fun SchemaBuilder.kommuneSchema() {
       description = "Informasjon om kontaktpersoner i kommunen"
       resolver { kommune -> kommune.kontaktpersoner }
       accessRule { _, context: Context ->
-        val log = context.get<Logger>()!!
-        log.debug("Kjører tilgangskontroll på path 'kontaktpersoner'")
-        if (context.get<JWTPrincipal>() == null) {
-          log.error("Uautorisert tilgang på kontaktpersoner")
-          UnauthorizedException()
-        } else null
+        context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
+        if (context.get<JWTPrincipal>() == null) UnauthorizedException() else null
       }
     }
   }
