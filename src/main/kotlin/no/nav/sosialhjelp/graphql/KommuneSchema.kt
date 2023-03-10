@@ -87,6 +87,17 @@ fun SchemaBuilder.kommuneSchema() {
     }
   }
 
+  query("kommuneSearch") {
+    description = "Søk etter kommune"
+    resolver { searchString: String, context: Context ->
+      context.get<GeodataClient>()!!.search(searchString).kommuner.map {
+        KommuneSearchResult(
+            fylkesnavn = it.fylkesnavn,
+            kommunenummer = it.kommunenummer,
+            kommunenavn = it.kommunenavnNorsk)
+      }
+    }
+  }
   type<Kommune> {
     dataProperty("kommunenavn") {
       prepare { kommune -> kommune.kommunenummer }
@@ -145,4 +156,11 @@ data class Kommune(
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String> = emptyList(),
     val tekniskAnsvarligEpost: List<String> = emptyList()
+)
+
+@Serializable
+data class KommuneSearchResult(
+    val fylkesnavn: String,
+    val kommunenummer: String,
+    val kommunenavn: String
 )

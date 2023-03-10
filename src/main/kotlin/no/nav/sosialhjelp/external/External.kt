@@ -6,6 +6,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.parameter
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import no.nav.sosialhjelp.maskinporten.Oauth2JwtProvider
@@ -74,6 +75,31 @@ class GeodataClient(private val httpClient: HttpClient) {
             if (it.status == HttpStatusCode.NotFound) {
               emptyList()
             } else throw ClientRequestException(it, "Fikk feil fra geodata: ${it.status}")
+          }
+        }
+        .respond()
+  }
+
+  suspend fun search(searchString: String): GeodataKommuneSearchResponse {
+    val response =
+        httpClient.get("${Config.geodataBaseUrl}/kommuneinfo/v1/sok") {
+          parameter("knavn", "$searchString*")
+          parameter(
+              "filtrer",
+              "antallTreff,kommuner.kommunenavnNorsk,kommuner.kommunenavn,kommuner.fylkesnavn,kommuner.kommunenummer")
+          accept(ContentType.Application.Json)
+        }
+    return Response(response) {
+          on2xx {
+            log.info("Fikk treff på kommunesøk med strengen: \"$searchString\"")
+            it.body()
+          }
+
+          on4xx {
+            if (it.status == HttpStatusCode.NotFound) {
+              log.error("Fikk ingen treff på kommunesøk med strengen: \"$searchString\"")
+              GeodataKommuneSearchResponse(antallTreff = 0, kommuner = emptyList())
+            } else throw ClientRequestException(it, "Fikk feil fra geodata: $it.status")
           }
         }
         .respond()

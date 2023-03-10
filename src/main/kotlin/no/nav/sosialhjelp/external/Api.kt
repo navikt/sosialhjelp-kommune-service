@@ -25,4 +25,11 @@ data class GeodataKommuneResponse(
     val kommunenavn: String,
     val kommunenavnNorsk: String,
     val kommunenummer: String,
+    val fylkesnavn: String,
+)
+
+@Serializable
+data class GeodataKommuneSearchResponse(
+    val antallTreff: Int,
+    val kommuner: List<GeodataKommuneResponse>
 )
