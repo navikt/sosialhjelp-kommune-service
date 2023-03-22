@@ -42,7 +42,7 @@ fun SchemaBuilder.kommuneSchema() {
                     Kontaktpersoner(
                         fiksKommune.kontaktpersoner.fagansvarligEpost,
                         fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
-            )
+                behandlingsansvarlig = fiksKommune.behandlingsansvarlig)
           }
       val alleKommuner =
           fiksKommuner
@@ -71,14 +71,16 @@ fun SchemaBuilder.kommuneSchema() {
       val log = context.get<Logger>()!!
       fiksClient.getFiksKommune(kommunenummer)?.let {
         Kommune(
-            it.harMidlertidigDeaktivertMottak,
-            it.harMidlertidigDeaktivertOppdateringer,
-            it.harNksTilgang,
-            it.kanMottaSoknader,
-            it.kanOppdatereStatus,
-            it.kommunenummer,
-            Kontaktpersoner(
-                it.kontaktpersoner.fagansvarligEpost, it.kontaktpersoner.tekniskAnsvarligEpost))
+            harMidlertidigDeaktivertMottak = it.harMidlertidigDeaktivertMottak,
+            harMidlertidigDeaktivertOppdateringer = it.harMidlertidigDeaktivertOppdateringer,
+            harNksTilgang = it.harNksTilgang,
+            kanMottaSoknader = it.kanMottaSoknader,
+            kanOppdatereStatus = it.kanOppdatereStatus,
+            kommunenummer = it.kommunenummer,
+            kontaktpersoner =
+                Kontaktpersoner(
+                    it.kontaktpersoner.fagansvarligEpost, it.kontaktpersoner.tekniskAnsvarligEpost),
+            behandlingsansvarlig = it.behandlingsansvarlig)
       }
           ?: getManuellKommune(kommunenummer)?.let {
             log.info("Fant manuelt påkoblet kommune: $kommunenummer")
@@ -149,7 +151,8 @@ data class Kommune(
     val kanOppdatereStatus: Boolean = false,
     val kommunenummer: String = "0301",
     val kontaktpersoner: Kontaktpersoner = Kontaktpersoner(),
-    val kommunenavn: String = "Oslo"
+    val kommunenavn: String = "Oslo",
+    val behandlingsansvarlig: String? = null
 )
 
 @Serializable
