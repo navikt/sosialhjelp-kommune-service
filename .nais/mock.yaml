@@ -1,9 +1,53 @@
-appName: "sosialhjelp-kommune-service-mock"
-ingresses:
-  - "https://sosialhjelp-kommune-service-mock.dev.intern.nav.no"
-maskinportenEnabled: false
-azureEnabled: false
-env:
-  "FIKS_BASE_URL": "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/fiks"
-  "MASKINPORTEN_WELL_KNOWN_URL": "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/well-known/maskinporten"
-  "ENV": "MOCK"
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: sosialhjelp-kommune-service-mock
+  namespace: teamdigisos
+  labels:
+    team: teamdigisos
+spec:
+  image: {{image}}
+  liveness:
+    path: "/internal/is_alive"
+    port: 8080
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/internal/is_ready"
+    port: 8080
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 1
+    max: 2
+    cpuThresholdPercentage: 50
+  prometheus:
+    enabled: true
+    path: "/internal/prometheus"
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+  maskinporten:
+    enabled: false
+  azure:
+    application:
+      enabled: false
+  ingresses:
+    - "https://sosialhjelp-kommune-service-mock.dev.intern.nav.no"
+  accessPolicy:
+    outbound:
+      external:
+        - host: ws.geonorge.no
+      rules:
+        - application: sosialhjelp-mock-alt-api-mock
+  env:
+    - name: FIKS_BASE_URL
+      value: "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/fiks"
+    - name: ENV
+      value: "MOCK"
+    - name: MASKINPORTEN_WELL_KNOWN_URL
+      value: "http://sosialhjelp-mock-alt-api-mock/sosialhjelp/mock-alt-api/well-known/maskinporten"
