@@ -8,6 +8,12 @@ val prometheus_version: String by project
 val kgraphql_version: String by project
 val nimbus_version: String by project
 
+object Versions {
+  const val gson = "2.8.9"
+  const val netty = "4.1.94.Final"
+  const val guava = "32.0.1-jre"
+}
+
 plugins {
   kotlin("jvm") version "1.8.0"
   id("io.ktor.plugin") version "2.2.3"
@@ -77,4 +83,16 @@ dependencies {
 
   testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+  constraints {
+    implementation("com.google.code.gson:gson:${Versions.gson}") {
+      because("https://github.com/advisories/GHSA-4jrv-ppp4-jm57")
+    }
+    implementation("io.netty:netty-handler:${Versions.netty}") {
+      because("https://github.com/advisories/GHSA-6mjq-h674-j845")
+    }
+    implementation("com.google.guava:guava:${Versions.guava}") {
+      because("https://github.com/advisories/GHSA-7g45-4rm6-3mm3")
+    }
+  }
 }
