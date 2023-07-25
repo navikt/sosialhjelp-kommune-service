@@ -14,6 +14,7 @@ internal class JwtGrantFactory(private val config: MaskinportenConfig) {
 
   private val signedJwt
     get() = SignedJWT(jwsHeader, jwtClaimSet).apply { sign(RSASSASigner(config.privateKey)) }
+
   private val jwsHeader
     get() = JWSHeader.Builder(JWSAlgorithm.RS256).keyID(config.privateKey.keyID).build()
 

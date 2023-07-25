@@ -18,6 +18,7 @@ class FiksClient(
     private val httpClient: HttpClient
 ) {
   private val log = LoggerFactory.getLogger(this::class.java)
+
   suspend fun getAllFiksKommuner(): List<FiksKommuneResponse> {
     val token = maskinportenClient.getToken()
     val response =

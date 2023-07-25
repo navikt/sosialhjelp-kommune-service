@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 class Response<T>(private val response: HttpResponse, block: Response<T>.() -> Response<T>) {
 
   val logger = LoggerFactory.getLogger(this::class.java)
+
   init {
     block()
   }
