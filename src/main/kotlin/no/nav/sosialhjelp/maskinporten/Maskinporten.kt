@@ -84,6 +84,7 @@ class HttpClientMaskinportenTokenProvider(
 private data class Token(val access_token: String) {
   private val signedJwt
     get() = SignedJWT.parse(access_token)
+
   private val expiry
     get() = signedJwt.jwtClaimsSet.expirationTime.toInstant().minusSeconds(LEEWAY_SECONDS)
 

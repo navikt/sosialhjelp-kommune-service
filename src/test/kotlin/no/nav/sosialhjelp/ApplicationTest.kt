@@ -37,6 +37,7 @@ class ApplicationTest {
           kanOppdatereStatus = true,
           kommunenummer = "123",
           kontaktpersoner = Kontaktpersoner(emptyList(), listOf("teknisk@ansvarlig.epost")))
+
   @Test
   fun `kommuner burde svare med informasjon uten token, saa lenge du ikke spor om kontaktpersoner`() =
       withSetup { client ->
