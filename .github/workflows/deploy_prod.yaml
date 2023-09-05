@@ -7,7 +7,7 @@ jobs:
     name: "Deploy app to prod"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - name: "Deploy to PROD"
         uses: "nais/deploy/actions/deploy@v1"
         env:
