@@ -14,7 +14,7 @@ jobs:
       actions: read
       security-events: write
       contents: read
-    uses: navikt/sosialhjelp-ci/.github/workflows/codeql_java.yml@master
+    uses: navikt/sosialhjelp-ci/.github/workflows/codeql_java.yml@main
 
   dependency_submission:
     name: Dependency Submission Gradle
