@@ -13,7 +13,7 @@ jobs:
       packages: write
       contents: write
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - uses: "gradle/wrapper-validation-action@v1"
       - uses: "actions/setup-java@v3"
         with:
@@ -35,7 +35,7 @@ jobs:
     needs: "build"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - name: "Deploy to DEV"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -47,7 +47,7 @@ jobs:
     needs: "build"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - name: "Deploy to MOCK"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -59,7 +59,7 @@ jobs:
     needs: "deployAppToDev"
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - name: "Deploy to PROD"
         uses: "nais/deploy/actions/deploy@v1"
         env:
