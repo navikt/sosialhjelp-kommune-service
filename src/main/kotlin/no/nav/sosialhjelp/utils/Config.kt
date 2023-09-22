@@ -6,7 +6,7 @@ import java.net.URL
 
 object Config {
   val geodataBaseUrl: String = getEnvVar("GEODATA_BASE_URL", "https://ws.geonorge.no")
-  val env: Env = Env.valueOf(getEnvVar("ENV", "MOCK"))
+  val env: Env = Env.valueOf(getEnvVar("ENV", "LOCAL"))
 
   object Fiks {
     val baseUrl = getEnvVar("FIKS_BASE_URL", "http://localhost:8989/sosialhjelp/mock-alt-api/fiks")
@@ -45,5 +45,6 @@ enum class Env {
   MOCK,
   DEV,
   TEST,
-  PROD
+  PROD,
+  LOCAL
 }

@@ -36,7 +36,7 @@ Dette prosjektet bygger og deployer vha Github Actions
 
 ## Lokal kjøring
 #### *uten* integrasjon til Fiks, dvs mot mock-alt
-Kjør med miljøvariabel: `ENV=MOCK`. Dette er også default
+Kjør med miljøvariabel: `ENV=LOCAL`. Dette er også default. Da dropper vi auth.
 #### *med* integrasjon til Fiks
 Kjør med miljøvariabel: `ENV=PROD` eller `ENV=DEV`
 
