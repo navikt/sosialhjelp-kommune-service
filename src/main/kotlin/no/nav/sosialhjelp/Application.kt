@@ -22,6 +22,8 @@ import no.nav.sosialhjelp.plugins.configureMonitoring
 import no.nav.sosialhjelp.plugins.configureRouting
 import no.nav.sosialhjelp.plugins.configureSecurity
 import no.nav.sosialhjelp.plugins.configureSerialization
+import no.nav.sosialhjelp.utils.Config
+import no.nav.sosialhjelp.utils.Env
 
 fun main() {
   embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
@@ -46,7 +48,9 @@ fun Application.module() {
   val micrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
   install(MicrometerMetrics) { registry = micrometerRegistry }
   configureRouting(micrometerRegistry::scrape)
-  configureSecurity()
+  if (Config.env != Env.LOCAL) {
+    configureSecurity()
+  }
   configureHTTP()
   configureMonitoring()
   configureSerialization()

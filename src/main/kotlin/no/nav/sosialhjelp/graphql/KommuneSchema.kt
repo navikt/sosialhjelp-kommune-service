@@ -18,6 +18,8 @@ import no.nav.sosialhjelp.external.FiksClient
 import no.nav.sosialhjelp.external.GeodataClient
 import no.nav.sosialhjelp.manueltpakoblet.getManuellKommune
 import no.nav.sosialhjelp.manueltpakoblet.getManuelleKommuner
+import no.nav.sosialhjelp.utils.Config
+import no.nav.sosialhjelp.utils.Env
 
 fun SchemaBuilder.kommuneSchema() {
 
@@ -119,7 +121,8 @@ fun SchemaBuilder.kommuneSchema() {
       resolver { kommune -> kommune.kontaktpersoner }
       accessRule { _, context: Context ->
         context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
-        if (context.get<JWTPrincipal>() == null) UnauthorizedException() else null
+        if (Config.env != Env.LOCAL && context.get<JWTPrincipal>() == null) UnauthorizedException()
+        else null
       }
     }
   }
