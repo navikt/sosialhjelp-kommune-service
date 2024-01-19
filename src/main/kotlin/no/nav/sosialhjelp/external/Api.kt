@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FiksKommuneResponse(
-    val behandlingsansvarlig: String?,
+    val behandlingsansvarlig: String? = null,
     val harMidlertidigDeaktivertMottak: Boolean,
     val harMidlertidigDeaktivertOppdateringer: Boolean,
     val harNksTilgang: Boolean,

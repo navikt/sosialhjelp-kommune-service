@@ -54,12 +54,9 @@ fun SchemaBuilder.kommuneSchema() {
                   })
               .distinctBy { it.kommunenummer }
 
+      val fiksKommuneNummer = fiksKommuner.map { fiksKommune -> fiksKommune.kommunenummer }
       val kommunerKunManuelle =
-          alleKommuner
-              .filterNot {
-                it.kommunenummer in fiksKommuner.map { fiksKommune -> fiksKommune.kommunenummer }
-              }
-              .map { it.kommunenummer }
+          alleKommuner.filterNot { it.kommunenummer in fiksKommuneNummer }.map { it.kommunenummer }
       context.get<Logger>()!!.info("Kommuner som kun er manuelt påkoblet: $kommunerKunManuelle")
 
       alleKommuner
