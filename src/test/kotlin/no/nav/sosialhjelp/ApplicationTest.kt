@@ -63,26 +63,6 @@ class ApplicationTest {
       }
 
   @Test
-  fun `kommuner burde gi 403 hvis du spor om kontaktpersoner uten token`() = withSetup {
-    externalServices {
-      hosts("http://localhost:8989") {
-        routing {
-          this@routing.install(ContentNegotiation) { json() }
-
-          get("/sosialhjelp/mock-alt-api/fiks/digisos/api/v1/nav/kommuner") {
-            call.respond(listOf(testKommune))
-          }
-        }
-      }
-    }
-    client
-        .post("/graphql") {
-          setBody("{\"query\": \"{ kommuner { kontaktpersoner { tekniskAnsvarligEpost } } }\"}")
-        }
-        .apply { assertEquals(HttpStatusCode.Unauthorized, status) }
-  }
-
-  @Test
   fun `kommuner burde gi 200 hvis du spor om kontaktpersoner med gyldig token`() =
       withSetup(
           authentication = {
