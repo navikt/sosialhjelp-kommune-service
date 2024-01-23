@@ -9,13 +9,13 @@ Interne henvendelser kan sendes via Slack i kanalen #team_digisos.
 
 ## Teknologi
 * Kotlin
-* JDK 17
+* JDK 21
 * Gradle
 * Ktor
 * GraphQL (KGraphQL)
 
 ### Krav
-- JDK 17
+- JDK 21
 
 ### Manuell deploy til dev
 Gjøres via GitHub Actions, se: https://github.com/navikt/sosialhjelp-kommune-service/actions/workflows/deploy_dev.yml

@@ -15,7 +15,7 @@ object Versions {
 }
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "1.9.22"
   id("io.ktor.plugin") version "2.3.2"
   id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
   id("com.ncorti.ktfmt.gradle") version "0.13.0"
@@ -45,7 +45,7 @@ tasks {
       }
 
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = "21"
     dependsOn(installPreCommitHook)
   }
 }
