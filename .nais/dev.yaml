@@ -41,7 +41,7 @@ spec:
       enabled: true
       allowAllUsers: true
   ingresses:
-    - "https://sosialhjelp-kommune-service.dev.intern.nav.no"
+    - "https://sosialhjelp-kommune-service.intern.dev.nav.no"
   accessPolicy:
     outbound:
       external:

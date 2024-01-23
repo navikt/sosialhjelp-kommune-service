@@ -37,7 +37,7 @@ spec:
     application:
       enabled: false
   ingresses:
-    - "https://sosialhjelp-kommune-service-mock.dev.intern.nav.no"
+    - "https://sosialhjelp-kommune-service-mock.intern.dev.nav.no"
   accessPolicy:
     outbound:
       external:
