@@ -35,6 +35,11 @@ application {
 
 repositories { mavenCentral() }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 tasks {
   val installPreCommitHook =
       register("installPreCommitHook", Copy::class) {
