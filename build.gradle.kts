@@ -1,25 +1,9 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val coroutines_version: String by project
-val logback_version: String by project
-val logstash_version: String by project
-val token_support_version: String by project
-val prometheus_version: String by project
-val kgraphql_version: String by project
-val nimbus_version: String by project
-
-object Versions {
-  const val gson = "2.8.9"
-  const val netty = "4.1.94.Final"
-  const val guava = "32.0.1-jre"
-}
-
 plugins {
-  kotlin("jvm") version "1.9.22"
-  id("io.ktor.plugin") version "2.3.2"
-  id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-  id("com.ncorti.ktfmt.gradle") version "0.13.0"
-  id("com.github.ben-manes.versions") version "0.47.0"
+  kotlin("jvm") version libs.versions.kotlin
+  alias(libs.plugins.ktor)
+  alias(libs.plugins.kotlin.plugin.serialization)
+  alias(libs.plugins.ktfmt)
+  alias(libs.plugins.versions)
 }
 
 group = "no.nav.sosialhjelp"
@@ -36,8 +20,8 @@ application {
 repositories { mavenCentral() }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks {
@@ -56,49 +40,21 @@ tasks {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+  implementation(libs.coroutines.core)
 
-  // Ktor-server
-  implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-call-id-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-  implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-  implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
-  implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
+  implementation(libs.bundles.ktor.server)
 
-  // Ktor-client
-  implementation("io.ktor:ktor-client-okhttp:$ktor_version")
-  implementation("io.ktor:ktor-client-core:$ktor_version")
-  implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-  implementation("io.ktor:ktor-client-logging:$ktor_version")
+  implementation(libs.bundles.ktor.client)
 
-  implementation("com.apurebase:kgraphql:$kgraphql_version")
-  implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
+  implementation(libs.bundles.kgraphql)
 
-  implementation("ch.qos.logback:logback-classic:$logback_version")
-  runtimeOnly("net.logstash.logback:logstash-logback-encoder:$logstash_version")
+  implementation(libs.logback)
 
-  implementation("com.nimbusds:nimbus-jose-jwt:$nimbus_version")
+  runtimeOnly(libs.logstash)
 
-  implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
+  implementation(libs.nimbus)
+  implementation(libs.micrometer)
 
-  testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-
-  constraints {
-    implementation("com.google.code.gson:gson:${Versions.gson}") {
-      because("https://github.com/advisories/GHSA-4jrv-ppp4-jm57")
-    }
-    implementation("io.netty:netty-handler:${Versions.netty}") {
-      because("https://github.com/advisories/GHSA-6mjq-h674-j845")
-    }
-    implementation("com.google.guava:guava:${Versions.guava}") {
-      because("https://github.com/advisories/GHSA-7g45-4rm6-3mm3")
-    }
-  }
+  testImplementation(libs.ktor.test)
+  testImplementation(libs.kotlin.test)
 }
