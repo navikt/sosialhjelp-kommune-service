@@ -3,66 +3,66 @@ on:
   push:
     branches:
       - "main"
-env:
-  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  "build":
-    name: "build"
-    runs-on: "ubuntu-20.04"
-    permissions:
-      packages: write
-      contents: write
+  build:
+    runs-on: ubuntu-22.04
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
-      - uses: "actions/checkout@v4"
-      - uses: "gradle/wrapper-validation-action@v1"
-      - uses: "actions/setup-java@v4"
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'gradle'
-      - name: "compile and run tests"
-        run: "./gradlew build buildFatJar"
-      - name: "Login to GitHub Docker Registry"
-        uses: "docker/login-action@v3"
+      - name: compile and run tests
+        run: ./gradlew build buildFatJar
+      - name: Build and push docker image to GAR
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
         with:
-          "registry": "ghcr.io"
-          "username": "${{ github.actor }}"
-          "password": "${{ secrets.GITHUB_TOKEN }}"
-      - name: "Build and push the Docker image"
-        run: "docker build --pull --tag ${IMAGE} . && docker push ${IMAGE}"
-  "deployAppToDev":
+          team: teamdigisos
+  deployAppToDev:
     name: "Deploy app to dev"
-    needs: "build"
-    runs-on: "ubuntu-20.04"
+    needs: build
+    runs-on: ubuntu-22.04
     steps:
-      - uses: "actions/checkout@v4"
-      - name: "Deploy to DEV"
-        uses: "nais/deploy/actions/deploy@v2"
+      - uses: actions/checkout@v4
+      - name: Deploy to DEV
+        uses: nais/deploy/actions/deploy@v2
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/dev.yaml"
-  "deployAppToMock":
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/dev.yaml
+          REF: ${{ github.sha }}
+          VAR: image=${{ needs.build.outputs.image }}
+  deployAppToMock:
     name: "Deploy app to mock"
-    needs: "build"
-    runs-on: "ubuntu-20.04"
+    needs: build
+    runs-on: ubuntu-22.04
     steps:
-      - uses: "actions/checkout@v4"
-      - name: "Deploy to MOCK"
-        uses: "nais/deploy/actions/deploy@v2"
+      - uses: actions/checkout@v4
+      - name: Deploy to DEV
+        uses: nais/deploy/actions/deploy@v2
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/mock.yaml"
-  "deployAppToProd":
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/mock.yaml
+          REF: ${{ github.sha }}
+          VAR: image=${{ needs.build.outputs.image }}
+  deployAppToProd:
     name: "Deploy app to prod"
-    needs: "deployAppToDev"
-    runs-on: "ubuntu-20.04"
+    needs: build
+    runs-on: ubuntu-22.04
     steps:
-      - uses: "actions/checkout@v4"
-      - name: "Deploy to PROD"
-        uses: "nais/deploy/actions/deploy@v2"
+      - uses: actions/checkout@v4
+      - name: Deploy to DEV
+        uses: nais/deploy/actions/deploy@v2
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "prod-gcp"
-          "RESOURCE": ".nais/prod.yaml"
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/prod.yaml
+          REF: ${{ github.sha }}
+          VAR: image=${{ needs.build.outputs.image }}
