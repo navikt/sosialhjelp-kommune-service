@@ -8,8 +8,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.call
-import io.ktor.server.application.install
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
@@ -44,7 +42,7 @@ class ApplicationTest {
         externalServices {
           hosts("http://localhost:8989") {
             routing {
-              this@routing.install(ContentNegotiation) { json() }
+              install(ContentNegotiation) { json() }
 
               get("/sosialhjelp/mock-alt-api/fiks/digisos/api/v1/nav/kommuner") {
                 call.respond(listOf(testKommune))
@@ -76,7 +74,7 @@ class ApplicationTest {
             externalServices {
               hosts("http://localhost:8989") {
                 routing {
-                  this@routing.install(ContentNegotiation) { json() }
+                  install(ContentNegotiation) { json() }
 
                   get("/sosialhjelp/mock-alt-api/fiks/digisos/api/v1/nav/kommuner") {
                     call.respond(listOf(testKommune))

@@ -9,7 +9,6 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.util.logging.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -18,8 +17,6 @@ import no.nav.sosialhjelp.external.FiksClient
 import no.nav.sosialhjelp.external.GeodataClient
 import no.nav.sosialhjelp.manueltpakoblet.getManuellKommune
 import no.nav.sosialhjelp.manueltpakoblet.getManuelleKommuner
-import no.nav.sosialhjelp.utils.Config
-import no.nav.sosialhjelp.utils.Env
 
 fun SchemaBuilder.kommuneSchema() {
 
@@ -112,16 +109,6 @@ fun SchemaBuilder.kommuneSchema() {
         ids.map { ExecutionResult.Success(kommuner[it] ?: "Ukjent") }
       }
     }
-
-    property("kontaktpersoner") {
-      description = "Informasjon om kontaktpersoner i kommunen"
-      resolver { kommune -> kommune.kontaktpersoner }
-      accessRule { _, context: Context ->
-        context.get<Logger>()!!.info("Kjører tilgangskontroll på path 'kontaktpersoner'")
-        if (Config.env != Env.LOCAL && context.get<JWTPrincipal>() == null) UnauthorizedException()
-        else null
-      }
-    }
   }
 }
 
@@ -150,20 +137,19 @@ data class Kommune(
     val kanMottaSoknader: Boolean = false,
     val kanOppdatereStatus: Boolean = false,
     val kommunenummer: String = "0301",
-    val kontaktpersoner: Kontaktpersoner = Kontaktpersoner(),
-    val kommunenavn: String = "Oslo",
-    val behandlingsansvarlig: String? = null
+    val kontaktpersoner: Kontaktpersoner? = null,
+    val behandlingsansvarlig: String? = null,
 )
 
 @Serializable
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String> = emptyList(),
-    val tekniskAnsvarligEpost: List<String> = emptyList()
+    val tekniskAnsvarligEpost: List<String> = emptyList(),
 )
 
 @Serializable
 data class KommuneSearchResult(
     val fylkesnavn: String,
     val kommunenummer: String,
-    val kommunenavn: String
+    val kommunenavn: String,
 )
