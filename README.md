@@ -27,7 +27,7 @@ Dette prosjektet bygger og deployer vha Github Actions
 - Docker image pushes til github package registry, eks [https://github.com/navikt/sosialhjelp-kommune-service/packages/](https://github.com/navikt/sosialhjelp-kommune-service/packages/)
 
 ### GitHub Actions
-- Docker image bygges og deployes til alle miljøer ved push til main => `.github/workflows/main.yml`
+- Docker image bygges og deployes til alle miljøer ved push til main => `.github/workflows/deploy_app.yml`
 - Deploy til dev => `.github/workflows/deploy_dev.yml`
 - Autodeploy til prod-fss fra master => `.github/workflows/deploy_prod.yml`
 
