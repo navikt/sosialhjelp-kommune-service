@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to MOCK
+      - name: Deploy to DEV
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to PROD
+      - name: Deploy to MOCK
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to DEV
+      - name: Deploy to PROD
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
