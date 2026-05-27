@@ -3,25 +3,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  "deployAppToDev":
+  deployAppToDev:
     name: "Deploy app to dev"
-    runs-on: "ubuntu-20.04"
+    runs-on: ubuntu-22.04
     steps:
       - uses: "actions/checkout@v4"
       - name: "Deploy to DEV"
         uses: "nais/deploy/actions/deploy@v2"
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/dev.yaml"
-  "deployAppToMock":
+          "CLUSTER": dev-gcp
+          "RESOURCE": .nais/dev.yaml
+  deployAppToMock:
     name: "Deploy app to mock"
-    runs-on: "ubuntu-20.04"
+    runs-on: ubuntu-22.04
     steps:
-      - uses: "actions/checkout@v4"
-      - name: "Deploy to MOCK"
-        uses: "nais/deploy/actions/deploy@v2"
+      - uses: actions/checkout@v4
+      - name: "Deploy to mock"
+        uses: nais/deploy/actions/deploy@v2
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/mock.yaml"

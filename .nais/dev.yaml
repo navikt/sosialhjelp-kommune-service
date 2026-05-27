@@ -64,5 +64,3 @@ spec:
       value: "https://api.fiks.test.ks.no"
     - name: ENV
       value: "DEV"
-    - name: MASKINPORTEN_WELL_KNOWN_URL
-      value: "https://ver2.maskinporten.no/.well-known/oauth-authorization-server"

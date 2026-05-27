@@ -27,7 +27,7 @@ fun withSetup(
     block: suspend ApplicationTestBuilder.(client: HttpClient) -> Unit
 ) = testApplication {
   val client = createClient {
-    this@createClient.install(ContentNegotiation) {
+    install(ContentNegotiation) {
       json(
           Json {
             isLenient = true

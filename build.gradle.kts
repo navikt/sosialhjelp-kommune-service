@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   kotlin("jvm") version libs.versions.kotlin
   alias(libs.plugins.ktor)
@@ -19,24 +21,29 @@ application {
 
 repositories { mavenCentral() }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_21
-  targetCompatibility = JavaVersion.VERSION_21
-}
+kotlin { compilerOptions { jvmTarget = JvmTarget.JVM_21 } }
 
 tasks {
   val installPreCommitHook =
       register("installPreCommitHook", Copy::class) {
         from(File(rootProject.rootDir, "scripts/pre-commit"))
         into(File(rootProject.rootDir, ".git/hooks"))
-        fileMode = 0b111101101
-        dirMode = 0b1010001010
+        filePermissions {
+          user {
+            read = true
+            write = true
+            execute = true
+          }
+        }
+        dirPermissions {
+          user {
+            read = true
+            write = true
+          }
+        }
       }
 
-  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "21"
-    dependsOn(installPreCommitHook)
-  }
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { dependsOn(installPreCommitHook) }
 }
 
 dependencies {
@@ -49,6 +56,12 @@ dependencies {
   implementation(libs.bundles.kgraphql)
 
   implementation(libs.logback)
+  implementation("io.ktor:ktor-server-content-negotiation:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
+  implementation("io.ktor:ktor-serialization-gson:3.3.0")
+  implementation("io.ktor:ktor-server-content-negotiation:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
 
   runtimeOnly(libs.logstash)
 
