@@ -2,7 +2,6 @@ package no.nav.sosialhjelp.graphql
 
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
-import com.apurebase.kgraphql.schema.execution.Executor
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.DEFAULT
@@ -19,8 +18,6 @@ import no.nav.sosialhjelp.manueltpakoblet.getManuellKommune
 import no.nav.sosialhjelp.manueltpakoblet.getManuelleKommuner
 
 fun SchemaBuilder.kommuneSchema() {
-
-  configure { executor = Executor.DataLoaderPrepared }
 
   query("kommuner") {
     description = "Alle kommuner"
