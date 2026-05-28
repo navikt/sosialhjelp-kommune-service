@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
   kotlin("jvm") version libs.versions.kotlin
   alias(libs.plugins.ktor)
@@ -21,7 +19,7 @@ application {
 
 repositories { mavenCentral() }
 
-kotlin { compilerOptions { jvmTarget = JvmTarget.JVM_21 } }
+kotlin { jvmToolchain(21) }
 
 tasks {
   val installPreCommitHook =
@@ -56,10 +54,6 @@ dependencies {
   implementation(libs.bundles.kgraphql)
 
   implementation(libs.ktor.serialization.gson)
-
-  //  implementation("io.ktor:ktor-server-content-negotiation:3.3.0")
-  //  implementation("io.ktor:ktor-server-core:3.3.0")
-  //  implementation("io.ktor:ktor-serialization-gson:3.3.0")
 
   implementation(libs.logback)
 
