@@ -1,7 +1,7 @@
 [versions]
 ktor = "3.5.0"
-kotlin = "2.3.0"
-logback = "1.5.27"
+kotlin = "2.3.21"
+logback = "1.5.33"
 logstash = "8.1"
 prometheus = "1.17.0-M1"
 kgraphql = "0.34.0"
