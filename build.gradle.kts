@@ -56,12 +56,12 @@ dependencies {
   implementation(libs.bundles.kgraphql)
 
   implementation(libs.logback)
-  implementation("io.ktor:ktor-server-content-negotiation:3.5.0")
-  implementation("io.ktor:ktor-server-core:3.5.0")
-  implementation("io.ktor:ktor-server-core:3.5.0")
-  implementation("io.ktor:ktor-serialization-gson:3.5.0")
-  implementation("io.ktor:ktor-server-content-negotiation:3.5.0")
-  implementation("io.ktor:ktor-server-core:3.5.0")
+  implementation("io.ktor:ktor-server-content-negotiation:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
+  implementation("io.ktor:ktor-serialization-gson:3.3.0")
+  implementation("io.ktor:ktor-server-content-negotiation:3.3.0")
+  implementation("io.ktor:ktor-server-core:3.3.0")
 
   runtimeOnly(libs.logstash)
 

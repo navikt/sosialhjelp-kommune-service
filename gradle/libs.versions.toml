@@ -1,12 +1,12 @@
 [versions]
-ktor = "3.5.0"
+ktor = "3.4.0"
 kotlin = "2.3.0"
 logback = "1.5.27"
 logstash = "8.1"
 prometheus = "1.17.0-M1"
-kgraphql = "0.40.0"
-coroutines = "1.11.0"
-nimbus = "10.9"
+kgraphql = "0.34.0"
+coroutines = "1.10.2"
+nimbus = "10.5"
 
 [libraries]
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
@@ -67,5 +67,5 @@ kgraphql = ["kgraphql", "kgraphql-ktor"]
 [plugins]
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.26.0" }
-versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.25.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
