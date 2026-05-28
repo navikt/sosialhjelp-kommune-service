@@ -2,7 +2,7 @@ package no.nav.sosialhjelp.utils
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
-import java.net.URL
+import java.net.URI
 
 object Config {
   val geodataBaseUrl: String = getEnvVar("GEODATA_BASE_URL", "https://ws.geonorge.no")
@@ -29,10 +29,11 @@ object Config {
     val issuer = getEnvVar("AZURE_OPENID_CONFIG_ISSUER", "issuer")
     val jwkProvider: JwkProvider =
         JwkProviderBuilder(
-                URL(
-                    getEnvVar(
-                        "AZURE_OPENID_CONFIG_JWKS_URI",
-                        "http://localhost:8989/sosialhjelp/mock-alt-api/jwks/azuread")))
+                URI(
+                        getEnvVar(
+                            "AZURE_OPENID_CONFIG_JWKS_URI",
+                            "http://localhost:8989/sosialhjelp/mock-alt-api/jwks/azuread"))
+                    .toURL())
             .build()
   }
 }
