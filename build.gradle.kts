@@ -45,6 +45,12 @@ tasks {
 }
 
 dependencies {
+  constraints {
+    implementation("tools.jackson.core:jackson-core:3.1.1") {
+      because("Vulnerability CVE-2026-29062")
+    }
+  }
+
   implementation(libs.coroutines.core)
 
   implementation(libs.bundles.ktor.server)
