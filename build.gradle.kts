@@ -10,6 +10,16 @@ group = "no.nav.sosialhjelp"
 
 version = "1.0.0"
 
+buildscript {
+  dependencies {
+    constraints {
+      classpath("org.codehaus.plexus:plexus-utils:4.0.3") {
+        because("Vulnerability GHSA-6fmv-xxpf-w3cw / CVE-2025-67030")
+      }
+    }
+  }
+}
+
 application {
   mainClass.set("no.nav.sosialhjelp.ApplicationKt")
 
