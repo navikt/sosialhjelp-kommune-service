@@ -23,7 +23,7 @@ data class MaskinportenConfig(
         },
     val scope: String = Config.Maskinporten.scopes,
     val resource: String = "??",
-    val expireAfterSec: Long = 120
+    val expireAfterSec: Long = 120,
 ) {
   init {
     require(expireAfterSec <= 120) { "Maskinporten allows a maximum of 120 seconds expiry" }

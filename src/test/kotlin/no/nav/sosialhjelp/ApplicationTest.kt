@@ -34,7 +34,8 @@ class ApplicationTest {
           kanMottaSoknader = true,
           kanOppdatereStatus = true,
           kommunenummer = "123",
-          kontaktpersoner = Kontaktpersoner(emptyList(), listOf("teknisk@ansvarlig.epost")))
+          kontaktpersoner = Kontaktpersoner(emptyList(), listOf("teknisk@ansvarlig.epost")),
+      )
 
   @Test
   fun `kommuner burde svare med informasjon uten token, saa lenge du ikke spor om kontaktpersoner`() =
@@ -56,7 +57,8 @@ class ApplicationTest {
               assertEquals(HttpStatusCode.OK, status)
               assertEquals(
                   body<GraphQLResponse<Kommuner, Unit>>().data?.kommuner?.get(0)?.kommunenummer,
-                  "123")
+                  "123",
+              )
             }
       }
 
@@ -70,38 +72,39 @@ class ApplicationTest {
                 validate { JWTPrincipal(it.payload) }
               }
             }
-          }) { client ->
-            externalServices {
-              hosts("http://localhost:8989") {
-                routing {
-                  install(ContentNegotiation) { json() }
+          }
+      ) { client ->
+        externalServices {
+          hosts("http://localhost:8989") {
+            routing {
+              install(ContentNegotiation) { json() }
 
-                  get("/sosialhjelp/mock-alt-api/fiks/digisos/api/v1/nav/kommuner") {
-                    call.respond(listOf(testKommune))
-                  }
-                }
+              get("/sosialhjelp/mock-alt-api/fiks/digisos/api/v1/nav/kommuner") {
+                call.respond(listOf(testKommune))
               }
             }
-            client
-                .post("/graphql") {
-                  val token = JWT.create().sign(Algorithm.none())
-                  bearerAuth(token)
-                  setBody(
-                      "{\"query\": \"{ kommuner { kontaktpersoner { tekniskAnsvarligEpost } } }\"}")
-                }
-                .apply {
-                  assertEquals(HttpStatusCode.OK, status)
-                  assertEquals(
-                      body<GraphQLResponse<Kommuner, Unit>>()
-                          .data
-                          ?.kommuner
-                          ?.firstOrNull()
-                          ?.kontaktpersoner
-                          ?.tekniskAnsvarligEpost
-                          ?.firstOrNull(),
-                      "teknisk@ansvarlig.epost")
-                }
           }
+        }
+        client
+            .post("/graphql") {
+              val token = JWT.create().sign(Algorithm.none())
+              bearerAuth(token)
+              setBody("{\"query\": \"{ kommuner { kontaktpersoner { tekniskAnsvarligEpost } } }\"}")
+            }
+            .apply {
+              assertEquals(HttpStatusCode.OK, status)
+              assertEquals(
+                  body<GraphQLResponse<Kommuner, Unit>>()
+                      .data
+                      ?.kommuner
+                      ?.firstOrNull()
+                      ?.kontaktpersoner
+                      ?.tekniskAnsvarligEpost
+                      ?.firstOrNull(),
+                  "teknisk@ansvarlig.epost",
+              )
+            }
+      }
 }
 
 @Serializable private data class GraphQLResponse<T, R>(val data: T? = null, val error: R? = null)

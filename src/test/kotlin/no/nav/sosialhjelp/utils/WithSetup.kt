@@ -24,7 +24,7 @@ val defaultApplicationBlock: Application.(client: HttpClient) -> Unit = { client
 
 fun withSetup(
     authentication: Application.() -> Unit = Application::configureSecurity,
-    block: suspend ApplicationTestBuilder.(client: HttpClient) -> Unit
+    block: suspend ApplicationTestBuilder.(client: HttpClient) -> Unit,
 ) = testApplication {
   val client = createClient {
     install(ContentNegotiation) {
@@ -32,7 +32,8 @@ fun withSetup(
           Json {
             isLenient = true
             ignoreUnknownKeys = true
-          })
+          }
+      )
     }
   }
   application {

@@ -18,7 +18,8 @@ object Config {
     val wellKnownUrl: String =
         getEnvVar(
             "MASKINPORTEN_WELL_KNOWN_URL",
-            "http://localhost:8989/sosialhjelp/mock-alt-api/well-known/maskinporten")
+            "http://localhost:8989/sosialhjelp/mock-alt-api/well-known/maskinporten",
+        )
     val clientId: String = getEnvVar("MASKINPORTEN_CLIENT_ID", "maskinporten_clientid")
     val clientJwk: String = getEnvVar("MASKINPORTEN_CLIENT_JWK", "generateRSA")
     val scopes: String = getEnvVar("MASKINPORTEN_SCOPES", "scopes")
@@ -32,8 +33,11 @@ object Config {
                 URI(
                         getEnvVar(
                             "AZURE_OPENID_CONFIG_JWKS_URI",
-                            "http://localhost:8989/sosialhjelp/mock-alt-api/jwks/azuread"))
-                    .toURL())
+                            "http://localhost:8989/sosialhjelp/mock-alt-api/jwks/azuread",
+                        )
+                    )
+                    .toURL()
+            )
             .build()
   }
 }
@@ -48,5 +52,5 @@ enum class Env {
   DEV,
   TEST,
   PROD,
-  LOCAL
+  LOCAL,
 }

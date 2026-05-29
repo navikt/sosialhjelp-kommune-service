@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 
 class FiksClient(
     private val maskinportenClient: Oauth2JwtProvider,
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
 ) {
   private val log = LoggerFactory.getLogger(this::class.java)
 
@@ -87,7 +87,8 @@ class GeodataClient(private val httpClient: HttpClient) {
           parameter("knavn", "$searchString*")
           parameter(
               "filtrer",
-              "antallTreff,kommuner.kommunenavnNorsk,kommuner.kommunenavn,kommuner.fylkesnavn,kommuner.kommunenummer")
+              "antallTreff,kommuner.kommunenavnNorsk,kommuner.kommunenavn,kommuner.fylkesnavn,kommuner.kommunenummer",
+          )
           accept(ContentType.Application.Json)
         }
     return Response(response) {

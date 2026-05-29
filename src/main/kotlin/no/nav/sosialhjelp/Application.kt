@@ -42,7 +42,8 @@ fun Application.module() {
             prettyPrint = true
             isLenient = true
             ignoreUnknownKeys = true
-          })
+          }
+      )
     }
   }
   val micrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)

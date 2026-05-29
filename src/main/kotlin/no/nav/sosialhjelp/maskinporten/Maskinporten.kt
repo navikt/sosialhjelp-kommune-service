@@ -36,7 +36,8 @@ class HttpClientMaskinportenTokenProvider(
           Json {
             ignoreUnknownKeys = true
             isLenient = true
-          })
+          }
+      )
     }
   }
 

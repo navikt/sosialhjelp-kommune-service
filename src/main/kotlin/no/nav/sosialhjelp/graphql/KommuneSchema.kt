@@ -37,15 +37,18 @@ fun SchemaBuilder.kommuneSchema() {
                 kontaktpersoner =
                     Kontaktpersoner(
                         fiksKommune.kontaktpersoner.fagansvarligEpost,
-                        fiksKommune.kontaktpersoner.tekniskAnsvarligEpost),
-                behandlingsansvarlig = fiksKommune.behandlingsansvarlig)
+                        fiksKommune.kontaktpersoner.tekniskAnsvarligEpost,
+                    ),
+                behandlingsansvarlig = fiksKommune.behandlingsansvarlig,
+            )
           }
       val alleKommuner =
           fiksKommuner
               .plus(
                   getManuelleKommuner().map {
                     Kommune(kommunenummer = it, kanMottaSoknader = true, kanOppdatereStatus = false)
-                  })
+                  }
+              )
               .distinctBy { it.kommunenummer }
 
       val fiksKommuneNummer = fiksKommuner.map { fiksKommune -> fiksKommune.kommunenummer }
@@ -72,8 +75,11 @@ fun SchemaBuilder.kommuneSchema() {
             kommunenummer = it.kommunenummer,
             kontaktpersoner =
                 Kontaktpersoner(
-                    it.kontaktpersoner.fagansvarligEpost, it.kontaktpersoner.tekniskAnsvarligEpost),
-            behandlingsansvarlig = it.behandlingsansvarlig)
+                    it.kontaktpersoner.fagansvarligEpost,
+                    it.kontaktpersoner.tekniskAnsvarligEpost,
+                ),
+            behandlingsansvarlig = it.behandlingsansvarlig,
+        )
       }
           ?: getManuellKommune(kommunenummer)?.let {
             log.info("Fant manuelt påkoblet kommune: $kommunenummer")
@@ -89,7 +95,8 @@ fun SchemaBuilder.kommuneSchema() {
         KommuneSearchResult(
             fylkesnavn = it.fylkesnavn ?: error("${it.kommunenavnNorsk} er uten fylke"),
             kommunenummer = it.kommunenummer,
-            kommunenavn = it.kommunenavnNorsk)
+            kommunenavn = it.kommunenavnNorsk,
+        )
       }
     }
   }
@@ -120,7 +127,8 @@ private val client = HttpClient {
           prettyPrint = true
           isLenient = true
           ignoreUnknownKeys = true
-        })
+        }
+    )
   }
 }
 

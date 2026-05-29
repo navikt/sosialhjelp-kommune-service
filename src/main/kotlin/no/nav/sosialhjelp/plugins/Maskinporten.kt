@@ -18,7 +18,8 @@ import no.nav.sosialhjelp.utils.Env
 fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
   if (Config.env == Env.TEST) {
     return HttpClientMaskinportenTokenProvider(
-        MaskinportenConfig(tokenEndpointUrl = "token_url", issuer = "issuer"))
+        MaskinportenConfig(tokenEndpointUrl = "token_url", issuer = "issuer")
+    )
   }
   val client = HttpClient {
     install(ContentNegotiation) {
@@ -26,7 +27,8 @@ fun Application.configureMaskinporten(): HttpClientMaskinportenTokenProvider {
           Json {
             ignoreUnknownKeys = true
             isLenient = true
-          })
+          }
+      )
     }
   }
   val wellKnown: WellKnown = runBlocking {

@@ -11,13 +11,13 @@ data class FiksKommuneResponse(
     val kanMottaSoknader: Boolean,
     val kanOppdatereStatus: Boolean,
     val kommunenummer: String,
-    val kontaktpersoner: Kontaktpersoner
+    val kontaktpersoner: Kontaktpersoner,
 )
 
 @Serializable
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String>,
-    val tekniskAnsvarligEpost: List<String>
+    val tekniskAnsvarligEpost: List<String>,
 )
 
 @Serializable
@@ -31,5 +31,5 @@ data class GeodataKommuneResponse(
 @Serializable
 data class GeodataKommuneSearchResponse(
     val antallTreff: Int,
-    val kommuner: List<GeodataKommuneResponse>
+    val kommuner: List<GeodataKommuneResponse>,
 )
