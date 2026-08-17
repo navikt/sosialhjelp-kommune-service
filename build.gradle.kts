@@ -16,6 +16,8 @@ buildscript {
       classpath("org.codehaus.plexus:plexus-utils:4.0.3") {
         because("Vulnerability GHSA-6fmv-xxpf-w3cw / CVE-2025-67030")
       }
+      classpath("com.fasterxml.jackson:jackson-bom:2.22.1")
+      classpath("org.apache.httpcomponents.client5:httpclient5:5.6.4")
     }
   }
 }
