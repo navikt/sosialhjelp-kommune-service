@@ -56,7 +56,7 @@ tasks {
 
 dependencies {
   constraints {
-    implementation("tools.jackson.core:jackson-core:3.1.1") {
+    implementation("tools.jackson.core:jackson-core:3.2.2") {
       because("Vulnerability CVE-2026-29062")
     }
   }
