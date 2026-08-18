@@ -50,28 +50,28 @@ class HttpClientMaskinportenTokenProvider(
   private suspend fun fetchToken(): Token {
     log.info("Henter token fra '${config.tokenEndpointUrl}'")
     return runCatching {
-          val response =
-              client.post(config.tokenEndpointUrl) {
-                expectSuccess = true
-                contentType(FormUrlEncoded)
-                setBody("grant_type=$GRANT_TYPE&assertion=${grants.jwt}")
-              }
-          when (response.status.value) {
-            in 200..299 -> {
-              log.info("Fikk token fra maskinporten.")
-              response.body<Token>()
-            }
-            in 400..499 -> {
-              log.error("Fikk client error fra maskinporten")
-              throw ClientRequestException(response, response.bodyAsText())
-            }
-            in 500..599 -> {
-              log.error("Fikk server error fra maskinporten")
-              throw ServerResponseException(response, response.bodyAsText())
-            }
-            else -> throw IllegalStateException("weeeeh")
+      val response =
+          client.post(config.tokenEndpointUrl) {
+            expectSuccess = true
+            contentType(FormUrlEncoded)
+            setBody("grant_type=$GRANT_TYPE&assertion=${grants.jwt}")
           }
+      when (response.status.value) {
+        in 200..299 -> {
+          log.info("Fikk token fra maskinporten.")
+          response.body<Token>()
         }
+        in 400..499 -> {
+          log.error("Fikk client error fra maskinporten")
+          throw ClientRequestException(response, response.bodyAsText())
+        }
+        in 500..599 -> {
+          log.error("Fikk server error fra maskinporten")
+          throw ServerResponseException(response, response.bodyAsText())
+        }
+        else -> throw IllegalStateException("weeeeh")
+      }
+    }
         .onFailure { log.error("Feil ved henting av token: ", it) }
         .onSuccess { token ->
           log.info("Cacher token")
