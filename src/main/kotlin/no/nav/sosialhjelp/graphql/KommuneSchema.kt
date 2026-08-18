@@ -1,7 +1,7 @@
 package no.nav.sosialhjelp.graphql
 
-import com.apurebase.kgraphql.Context
-import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
+import de.stuebingerb.kgraphql.Context
+import de.stuebingerb.kgraphql.schema.dsl.SchemaBuilder
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.DEFAULT

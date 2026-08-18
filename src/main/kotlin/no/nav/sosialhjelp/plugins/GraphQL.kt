@@ -1,6 +1,6 @@
 package no.nav.sosialhjelp.plugins
 
-import com.apurebase.kgraphql.GraphQL
+import de.stuebingerb.kgraphql.GraphQL
 import io.ktor.client.HttpClient
 import io.ktor.server.application.*
 import io.ktor.server.application.Application
