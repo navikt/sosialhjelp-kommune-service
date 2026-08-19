@@ -55,8 +55,15 @@ tasks {
 }
 
 dependencies {
+  constraints {
+    implementation("org.apache.httpcomponents.client5:httpclient5") {
+      version { strictly("5.6.4") }
+      because("Vulnerability CVE-2026-54428 and CVE-2026-54399")
+    }
+  }
+
   // pga sårbarheter
-  implementation(platform("tools.jackson:jackson-bom:3.2.2"))
+  implementation(enforcedPlatform("tools.jackson:jackson-bom:3.2.2"))
 
   implementation(libs.coroutines.core)
 
