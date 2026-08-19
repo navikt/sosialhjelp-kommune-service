@@ -62,7 +62,7 @@ dependencies {
     }
   }
 
-  // pga sårbarheter
+  // pga sårbarheter i jackson
   implementation(enforcedPlatform("tools.jackson:jackson-bom:3.2.2"))
 
   implementation(libs.coroutines.core)
