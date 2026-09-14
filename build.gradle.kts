@@ -3,7 +3,7 @@ plugins {
   alias(libs.plugins.ktor)
   alias(libs.plugins.kotlin.plugin.serialization)
   alias(libs.plugins.ktfmt)
-  alias(libs.plugins.versions)
+  alias(libs.plugins.version.catalog.update)
 }
 
 group = "no.nav.sosialhjelp"

@@ -1,78 +1,72 @@
 [versions]
-ktor = "3.5.2"
+coroutines = "1.11.0"
+kgraphql = "0.42.0"
 kotlin = "2.4.10"
+ktor = "3.5.2"
 logback = "1.6.3"
 logstash = "9.0"
-prometheus = "1.17.0"
-kgraphql = "0.42.0"
-coroutines = "1.11.0"
 nimbus = "10.9.1"
+prometheus = "1.17.0"
+version-catalog-update = "1.1.1"
 
 [libraries]
-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
-
-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
-ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-server-auth-jvm = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "ktor" }
-ktor-server-auth-jwt-jvm = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor" }
-ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
-ktor-server-call-logging-jvm = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktor" }
-ktor-server-call-id-jvm = { module = "io.ktor:ktor-server-call-id-jvm", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
-ktor-serialization-kotlinx-json-jvm = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
-ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
-ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
-ktor-server-status-pages-jvm = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktor" }
-
-ktor-serialization-gson = { module= "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
-
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
-
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kgraphql = { module = "de.stuebingerb:kgraphql", version.ref = "kgraphql" }
 kgraphql-ktor = { module = "de.stuebingerb:kgraphql-ktor", version.ref = "kgraphql" }
-
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
+ktor-serialization-kotlinx-json-jvm = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
+ktor-server-auth-jvm = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "ktor" }
+ktor-server-auth-jwt-jvm = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor" }
+ktor-server-call-id-jvm = { module = "io.ktor:ktor-server-call-id-jvm", version.ref = "ktor" }
+ktor-server-call-logging-jvm = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-server-host-common-jvm = { module = "io.ktor:ktor-server-host-common-jvm", version.ref = "ktor" }
+ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
+ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-status-pages-jvm = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktor" }
+ktor-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logstash = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash" }
-
+micrometer = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 nimbus = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus" }
 
-micrometer = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
-
-ktor-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-
 [bundles]
-ktor-server = [
-    "ktor-server-core-jvm",
-    "ktor-server-auth-jvm",
-    "ktor-server-auth-jwt-jvm",
-    "ktor-server-host-common-jvm",
-    "ktor-server-call-logging-jvm",
-    "ktor-server-call-id-jvm",
-    "ktor-server-content-negotiation-jvm",
-    "ktor-serialization-kotlinx-json-jvm",
-    "ktor-server-netty-jvm",
-    "ktor-server-metrics-micrometer",
-    "ktor-server-status-pages-jvm",
-    "ktor-server-content-negotiation",
-    "ktor-server-core",
-
+kgraphql = [
+    "kgraphql",
+    "kgraphql-ktor",
 ]
 ktor-client = [
-    "ktor-client-okhttp",
-    "ktor-client-core",
     "ktor-client-content-negotiation",
+    "ktor-client-core",
     "ktor-client-logging",
+    "ktor-client-okhttp",
 ]
-kgraphql = ["kgraphql", "kgraphql-ktor"]
-
+ktor-server = [
+    "ktor-serialization-kotlinx-json-jvm",
+    "ktor-server-auth-jvm",
+    "ktor-server-auth-jwt-jvm",
+    "ktor-server-call-id-jvm",
+    "ktor-server-call-logging-jvm",
+    "ktor-server-content-negotiation",
+    "ktor-server-content-negotiation-jvm",
+    "ktor-server-core",
+    "ktor-server-core-jvm",
+    "ktor-server-host-common-jvm",
+    "ktor-server-metrics-micrometer",
+    "ktor-server-netty-jvm",
+    "ktor-server-status-pages-jvm",
+]
 
 [plugins]
-ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.27.0" }
-versions = { id = "com.github.ben-manes.versions", version = "0.61.0" }
+ktfmt = "com.ncorti.ktfmt.gradle:0.27.0"
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
