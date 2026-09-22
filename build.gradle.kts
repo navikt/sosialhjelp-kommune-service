@@ -12,7 +12,7 @@ version = "1.0.0"
 
 buildscript {
   dependencies {
-    classpath("org.codehaus.plexus:plexus-utils:4.0.3") {
+    classpath("org.codehaus.plexus:plexus-utils:4.1.0") {
       because("Vulnerability GHSA-6fmv-xxpf-w3cw / CVE-2025-67030")
     }
     classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.22.1"))
