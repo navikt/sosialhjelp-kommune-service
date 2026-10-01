@@ -2,10 +2,10 @@
 coroutines = "1.11.0"
 kgraphql = "0.42.0"
 kotlin = "2.4.20"
-ktor = "3.5.2"
+ktor = "3.6.0"
 logback = "1.6.4"
 logstash = "9.0"
-nimbus = "10.9.1"
+nimbus = "10.10"
 prometheus = "1.17.1"
 version-catalog-update = "1.1.1"
 
