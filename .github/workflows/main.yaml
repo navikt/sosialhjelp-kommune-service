@@ -16,8 +16,13 @@ jobs:
       image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - uses: actions/checkout@v7
+<<<<<<< HEAD
       - uses: gradle/actions/wrapper-validation@v6.4.0
       - uses: actions/setup-java@v5
+=======
+      - uses: gradle/actions/wrapper-validation@v6.3.0
+      - uses: actions/setup-java@v6
+>>>>>>> origin/pr-90
         with:
           distribution: 'temurin'
           java-version: '21'
