@@ -1,9 +1,9 @@
 [versions]
 coroutines = "1.11.0"
 kgraphql = "0.42.0"
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 ktor = "3.6.0"
-logback = "1.6.4"
+logback = "1.6.5"
 logstash = "9.0"
 nimbus = "10.10"
 prometheus = "1.17.1"
