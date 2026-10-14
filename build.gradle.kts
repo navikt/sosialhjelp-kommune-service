@@ -16,7 +16,7 @@ buildscript {
       because("Vulnerability GHSA-6fmv-xxpf-w3cw / CVE-2025-67030")
     }
     classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.22.3"))
-    classpath("org.apache.httpcomponents.client5:httpclient5:5.6.4")
+    classpath("org.apache.httpcomponents.client5:httpclient5:5.6.5")
   }
 }
 
