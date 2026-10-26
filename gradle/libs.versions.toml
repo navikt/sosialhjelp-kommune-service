@@ -6,7 +6,7 @@ ktor = "3.6.0"
 logback = "1.6.5"
 logstash = "9.0"
 nimbus = "10.10"
-prometheus = "1.17.1"
+prometheus = "1.17.2"
 version-catalog-update = "1.1.1"
 
 [libraries]

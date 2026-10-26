@@ -15,7 +15,7 @@ buildscript {
     classpath("org.codehaus.plexus:plexus-utils:4.1.0") {
       because("Vulnerability GHSA-6fmv-xxpf-w3cw / CVE-2025-67030")
     }
-    classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.22.3"))
+    classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.22.4"))
     classpath("org.apache.httpcomponents.client5:httpclient5:5.6.5")
   }
 }
@@ -63,7 +63,7 @@ dependencies {
   }
 
   // pga sårbarheter i jackson
-  implementation(enforcedPlatform("tools.jackson:jackson-bom:3.2.3"))
+  implementation(enforcedPlatform("tools.jackson:jackson-bom:3.2.4"))
 
   implementation(libs.coroutines.core)
 
