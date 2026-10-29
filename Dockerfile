@@ -1,11 +1,9 @@
-FROM gcr.io/distroless/java21-debian12
-
-COPY build/libs/sosialhjelp-kommune-service-all.jar /app/sosialhjelp-kommune-service-all.jar
-
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+ENV TZ="Europe/Oslo"
 ENV JAVA_OPTS="-Dlogback.configurationFile=logback.xml"
+
+COPY build/libs/sosialhjelp-kommune-service-all.jar /app/app.jar
 
 WORKDIR /app
 
-USER nonroot
-
-CMD ["sosialhjelp-kommune-service-all.jar"]
+CMD ["-jar","app.jar"]
